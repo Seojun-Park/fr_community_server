@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserResolver } from './user.resolver';
+import { MarketResolver } from './market.resolver';
 
-describe('UserResolver', () => {
-  let resolver: UserResolver;
+describe('MarketResolver', () => {
+  let resolver: MarketResolver;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserResolver],
+      providers: [MarketResolver],
     }).compile();
 
-    resolver = module.get<UserResolver>(UserResolver);
+    resolver = module.get<MarketResolver>(MarketResolver);
   });
   it('tmp', () => {
     expect(console.log('later'));

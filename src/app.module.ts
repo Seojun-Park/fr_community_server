@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
@@ -6,6 +6,13 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
+import { BoardModule } from './board/board.module';
+import { MarketModule } from './market/market.module';
+import { ImageModule } from './image/image.module';
+import { RentModule } from './rent/rent.module';
+import { DmModule } from './dm/dm.module';
+import { ChatModule } from './chat/chat.module';
+import { LoggerMiddleware } from './middlewares/logger.middleware';
 
 @Module({
   imports: [
@@ -25,8 +32,18 @@ import { UserModule } from './user/user.module';
       keepConnectionAlive: true,
     }),
     UserModule,
+    BoardModule,
+    MarketModule,
+    ImageModule,
+    RentModule,
+    DmModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(LoggerMiddleware).forRoutes('*');
+  }
+}

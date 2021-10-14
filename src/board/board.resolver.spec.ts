@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { UserResolver } from './user.resolver';
+import { BoardResolver } from './board.resolver';
 
-describe('UserResolver', () => {
-  let resolver: UserResolver;
+describe('BoardResolver', () => {
+  let resolver: BoardResolver;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserResolver],
+      providers: [BoardResolver],
     }).compile();
 
-    resolver = module.get<UserResolver>(UserResolver);
+    resolver = module.get<BoardResolver>(BoardResolver);
   });
   it('tmp', () => {
     expect(console.log('later'));

@@ -1,0 +1,35 @@
+import { Field, Int, ObjectType } from '@nestjs/graphql';
+import {
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { User } from '../../user/entity/user.entity';
+
+@Entity()
+@ObjectType()
+export class Chat {
+  @PrimaryGeneratedColumn()
+  @Field((type) => Int)
+  id: number;
+
+  @CreateDateColumn()
+  @Field()
+  createdAt: string;
+
+  @UpdateDateColumn()
+  @Field()
+  updatedAt: string;
+
+  @DeleteDateColumn()
+  @Field({ nullable: true })
+  deletedAt?: string | null;
+
+  @ManyToMany(() => User, (user) => user.Chats, { eager: true })
+  @Field(() => [User])
+  Members: User[];
+}

@@ -10,9 +10,43 @@ export class UserService {
     @InjectRepository(User) private userRepository: Repository<User>,
   ) {}
 
-  createUser(args: CreateUserInput): Promise<User> {
-    const newUser = this.userRepository.create(args);
-    return this.userRepository.save(newUser);
+  async createUser(args: CreateUserInput): Promise<string | User> {
+    try {
+      const existedUser = await this.userRepository.findOne({
+        where: { email: args.email },
+      });
+      if (existedUser) {
+        return 'this email is already taken ';
+      }
+      const newUser = await this.userRepository.create({ ...args });
+      await this.userRepository.save(newUser);
+      if (!newUser) return `Can't create an user`;
+      return newUser;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  async getUser(id: number): Promise<string | User> {
+    try {
+      const user: User | undefined = await this.userRepository.findOne({
+        where: { id },
+      });
+      if (!user) return 'user not found';
+      return user;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  async getUsers(): Promise<string | User[]> {
+    try {
+      const user: User[] | undefined = await this.userRepository.find();
+      if (!user) return 'user not found';
+      return user;
+    } catch (err) {
+      return err.message;
+    }
   }
 
   async findAll(): Promise<User[]> {
