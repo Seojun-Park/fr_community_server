@@ -6,31 +6,22 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Reply } from '../../reply/entity/reply.entity';
+import { Board } from '../../board/entity/board.entity';
 import { User } from '../../user/entity/user.entity';
 
 @Entity()
 @ObjectType()
-export class Board {
+export class Reply {
   @PrimaryGeneratedColumn()
   @Field((type) => Int)
   id: number;
 
   @Column()
   @Field()
-  title: string;
-
-  @Column()
-  @Field()
   content: string;
-
-  @Column()
-  @Field()
-  category: string;
 
   @CreateDateColumn()
   @Field()
@@ -40,20 +31,25 @@ export class Board {
   @Field()
   updatedAt: string;
 
-  @Column({ name: 'WriterId' })
-  @Field(() => Int)
-  WriterId: number;
-
   @DeleteDateColumn()
   @Field({ nullable: true })
   deletedAt?: string | null;
 
-  @ManyToOne(() => User, (user) => user.Board)
-  @Field((Type) => User)
-  @JoinColumn([{ name: 'WriterId', referencedColumnName: 'id' }])
-  Writer: User;
+  @Column({ name: 'BoardId' })
+  @Field(() => Int)
+  BoardId: number;
 
-  @OneToMany(() => Reply, (reply) => reply.Board, { nullable: true })
-  @Field((type) => [Reply], { nullable: true })
-  Replies: Reply[];
+  @ManyToOne((type) => Board, (board) => board.Replies)
+  @Field((type) => Board)
+  @JoinColumn([{ name: 'BoardId', referencedColumnName: 'id' }])
+  Board: Board;
+
+  @Column({ name: 'UserId' })
+  @Field((type) => User)
+  UserId: number;
+
+  @ManyToOne((type) => User, (user) => user.Replies)
+  @Field((type) => User)
+  @JoinColumn([{ name: 'UserId', referencedColumnName: 'id' }])
+  User: User;
 }

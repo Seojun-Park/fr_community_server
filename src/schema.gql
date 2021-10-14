@@ -2,14 +2,29 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Board {
+type Reply {
   id: Int!
-  title: String!
   content: String!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
+  BoardId: Int!
+  Board: Board!
+  UserId: User!
+  User: User!
+}
+
+type Board {
+  id: Int!
+  title: String!
+  content: String!
+  category: String!
+  createdAt: String!
+  updatedAt: String!
+  WriterId: Int!
+  deletedAt: String
   Writer: User!
+  Replies: [Reply!]
 }
 
 type Chat {
@@ -91,6 +106,7 @@ type User {
   Rent: [Rent!]
   AsSender: [Dm!]
   AsReceiver: [Dm!]
+  Replies: [Reply!]
   Chats: [Chat!]!
 }
 
@@ -106,13 +122,29 @@ type UsersReturn {
   data: [User!]
 }
 
+type BoardReturn {
+  success: Boolean!
+  error: String
+  data: Board
+}
+
+type BoardsReturn {
+  success: Boolean!
+  error: String
+  data: [Board!]
+}
+
 type Query {
   getUser(id: Int!): UserReturn!
   getUsers: UsersReturn!
+  getBoard(id: Int!): BoardReturn!
+  getBoards: BoardsReturn!
 }
 
 type Mutation {
   createUser(args: CreateUserInput!): UserReturn!
+  editUser(args: EditUserInput!): UserReturn!
+  changePassword(newPassword: String!, password: String!, id: Int!): UserReturn!
 }
 
 input CreateUserInput {
@@ -121,4 +153,11 @@ input CreateUserInput {
   nickname: String!
   email: String!
   password: String!
+}
+
+input EditUserInput {
+  id: Int!
+  firstName: String
+  lastName: String
+  nickname: String
 }

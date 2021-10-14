@@ -2,30 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
+import { EditUserInput } from './dto/edit-user.input';
 import { User } from './entity/user.entity';
+import bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
-
-  async createUser(args: CreateUserInput): Promise<string | User> {
-    try {
-      const existedUser = await this.userRepository.findOne({
-        where: { email: args.email },
-      });
-      if (existedUser) {
-        return 'this email is already taken ';
-      }
-      const newUser = await this.userRepository.create({ ...args });
-      await this.userRepository.save(newUser);
-      if (!newUser) return `Can't create an user`;
-      return newUser;
-    } catch (err) {
-      return err.message;
-    }
-  }
 
   async getUser(id: number): Promise<string | User> {
     try {
@@ -42,18 +27,83 @@ export class UserService {
   async getUsers(): Promise<string | User[]> {
     try {
       const user: User[] | undefined = await this.userRepository.find();
-      if (!user) return 'user not found';
+      if (!user) return 'Fail to request user list';
+      if (user.length === 0) return 'no user registed';
       return user;
     } catch (err) {
       return err.message;
     }
   }
 
-  async findAll(): Promise<User[]> {
-    return this.userRepository.find();
+  async createUser(args: CreateUserInput): Promise<string | User> {
+    try {
+      const { email, firstName, nickname, lastName, password } = args;
+      const existedUser = await this.userRepository.findOne({
+        where: { email },
+      });
+      if (existedUser) {
+        return 'this email is already taken ';
+      }
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const newUser = await this.userRepository.create({
+        email,
+        firstName,
+        lastName,
+        nickname,
+        password: hashedPassword,
+      });
+      await this.userRepository.save(newUser);
+      if (!newUser) return `Can't create an user`;
+      return newUser;
+    } catch (err) {
+      return err.message;
+    }
   }
 
-  async findOne(id: number): Promise<User> {
-    return this.userRepository.findOneOrFail(id);
+  async editUser(args: EditUserInput): Promise<string | User> {
+    try {
+      const { id, firstName, lastName, nickname } = args;
+      const user: User | undefined = await this.userRepository.findOne({
+        where: { id },
+      });
+      if (!user) return 'user not found';
+      const prevValue: {
+        firstName: string;
+        lastName: string;
+        nickname: string;
+      } = {
+        firstName,
+        lastName,
+        nickname,
+      };
+      user.firstName = firstName || prevValue.firstName;
+      user.lastName = lastName || prevValue.lastName;
+      user.nickname = nickname || prevValue.nickname;
+      await this.userRepository.save(user);
+      return user;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  async changePassword(
+    id: number,
+    password: string,
+    newPassword: string,
+  ): Promise<string | User> {
+    try {
+      const user: User | undefined = await this.userRepository.findOne({
+        where: { id },
+      });
+      if (!user) return 'no user found';
+      const pwdCheck = await bcrypt.compare(password, user.password);
+      if (!pwdCheck) return 'password is not matched';
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+      await this.userRepository.save(user);
+      return user;
+    } catch (err) {
+      return err.message;
+    }
   }
 }

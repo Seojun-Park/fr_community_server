@@ -8,9 +8,12 @@ import { Market } from '../market/entity/market.entity';
 import { Rent } from '../rent/entity/rent.entity';
 import { Chat } from '../chat/entity/chat.entity';
 import { Dm } from '../dm/entity/dm.entity';
+import { Reply } from '../reply/entity/reply.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User, Board, Market, Rent, Chat, Dm])],
+  imports: [
+    TypeOrmModule.forFeature([User, Board, Market, Rent, Chat, Dm, Reply]),
+  ],
   providers: [UserService, UserResolver],
   exports: [UserService, UserResolver],
 })

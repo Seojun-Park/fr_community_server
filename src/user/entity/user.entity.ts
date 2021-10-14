@@ -16,6 +16,7 @@ import { Chat } from '../../chat/entity/chat.entity';
 import { Dm } from '../../dm/entity/dm.entity';
 import { Market } from '../../market/entity/market.entity';
 import { Rent } from '../../rent/entity/rent.entity';
+import { Reply } from '../../reply/entity/reply.entity';
 
 @Entity()
 @ObjectType()
@@ -85,6 +86,10 @@ export class User {
   @OneToMany(() => Dm, (dm) => dm.Receiver, { nullable: true })
   @Field(() => [Dm], { nullable: true })
   AsReceiver: Dm[];
+
+  @OneToMany(() => Reply, (reply) => reply.User, { nullable: true })
+  @Field(() => [Reply], { nullable: true })
+  Replies: Reply[];
 
   @ManyToMany(() => Chat, (chat) => chat.Members)
   @JoinTable({
