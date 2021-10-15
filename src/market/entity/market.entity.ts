@@ -40,6 +40,10 @@ export class Market {
   @Field()
   location: string;
 
+  @Column()
+  @Field()
+  status: string;
+
   @CreateDateColumn()
   @Field()
   createdAt: string;

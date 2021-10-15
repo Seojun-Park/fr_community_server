@@ -8,5 +8,6 @@ import { Market } from '../market/entity/market.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Image, Market])],
   providers: [ImageService, ImageResolver],
+  exports: [ImageService, ImageResolver],
 })
 export class ImageModule {}

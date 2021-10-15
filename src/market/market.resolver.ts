@@ -1,4 +1,64 @@
-import { Resolver } from '@nestjs/graphql';
+import { Args, Query, Resolver, Int, Mutation } from '@nestjs/graphql';
+import { CreateMarketInput } from './dto/create-market.input';
+import { EditMarketInput } from './dto/edit-market.input';
+import { MarketReturn, MarketsReturn } from './dto/market-return.dto';
+import { Market } from './entity/market.entity';
+import { MarketService } from './market.service';
 
-@Resolver()
-export class MarketResolver {}
+@Resolver((of) => Market)
+export class MarketResolver {
+  constructor(private readonly marketService: MarketService) {}
+
+  @Query((returns) => MarketReturn)
+  async getMarket(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<MarketReturn> {
+    const res = await this.marketService.getMarket(id);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
+
+  @Query((returns) => MarketsReturn)
+  async getMarkets(): Promise<MarketsReturn> {
+    const res = await this.marketService.getMarkets();
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
+
+  @Mutation((returns) => MarketReturn)
+  async createMarket(
+    @Args('args', { type: () => CreateMarketInput }) args: CreateMarketInput,
+  ) {
+    const res = await this.marketService.createMarket(args);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
+
+  @Mutation((returns) => MarketReturn)
+  async editMarket(
+    @Args('args', { type: () => EditMarketInput }) args: EditMarketInput,
+  ) {
+    const res = await this.marketService.editMarket(args);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
+
+  @Mutation((returns) => MarketReturn)
+  async deleteMarket(
+    @Args('id', { type: () => Int }) id: number,
+  ): Promise<boolean | string> {
+    return await this.marketService.deleteMarket(id);
+  }
+}

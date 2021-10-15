@@ -84,6 +84,7 @@ type Market {
   UserId: Int!
   price: String!
   location: String!
+  status: String!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -134,17 +135,37 @@ type BoardsReturn {
   data: [Board!]
 }
 
+type MarketReturn {
+  success: Boolean!
+  error: String
+  data: Market
+}
+
+type MarketsReturn {
+  success: Boolean!
+  error: String
+  data: [Market!]
+}
+
 type Query {
   getUser(id: Int!): UserReturn!
   getUsers: UsersReturn!
   getBoard(id: Int!): BoardReturn!
   getBoards: BoardsReturn!
+  getMarket(id: Int!): MarketReturn!
+  getMarkets: MarketsReturn!
 }
 
 type Mutation {
   createUser(args: CreateUserInput!): UserReturn!
   editUser(args: EditUserInput!): UserReturn!
   changePassword(newPassword: String!, password: String!, id: Int!): UserReturn!
+  createBoard(args: CreateBoardInput!): BoardReturn!
+  editBoard(args: EditBoardInput!): BoardReturn!
+  deleteBoard(id: Int!): BoardReturn!
+  createMarket(args: CreateMarketInput!): MarketReturn!
+  editMarket(args: EditMarketInput!): MarketReturn!
+  deleteMarket(id: Int!): MarketReturn!
 }
 
 input CreateUserInput {
@@ -160,4 +181,36 @@ input EditUserInput {
   firstName: String
   lastName: String
   nickname: String
+}
+
+input CreateBoardInput {
+  UserId: Int!
+  title: String!
+  content: String!
+  category: String!
+}
+
+input EditBoardInput {
+  boardId: Int!
+  title: String
+  content: String
+}
+
+input CreateMarketInput {
+  UserId: Int!
+  title: String!
+  content: String!
+  price: String!
+  status: String!
+  location: String!
+  images: [String!]
+}
+
+input EditMarketInput {
+  MarketId: Int!
+  title: String
+  content: String
+  price: String
+  location: String
+  status: String
 }
