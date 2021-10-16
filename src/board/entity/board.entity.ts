@@ -48,7 +48,10 @@ export class Board {
   @Field({ nullable: true })
   deletedAt?: string | null;
 
-  @ManyToOne(() => User, (user) => user.Board)
+  @ManyToOne(() => User, (user) => user.Board, {
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
   @Field((Type) => User)
   @JoinColumn([{ name: 'WriterId', referencedColumnName: 'id' }])
   Writer: User;

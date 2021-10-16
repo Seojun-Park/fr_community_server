@@ -4,10 +4,12 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Chat } from '../../chat/entity/chat.entity';
 import { User } from '../../user/entity/user.entity';
 
 @Entity()
@@ -41,11 +43,33 @@ export class Dm {
   @Field({ nullable: true })
   ReceiverId: number;
 
-  @ManyToOne((type) => User, (user) => user.AsSender, { nullable: true })
+  @Column()
+  @Field(() => Int)
+  ChatId: number;
+
+  @ManyToOne((type) => User, (user) => user.AsSender, {
+    nullable: true,
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn([{ name: 'SenderId', referencedColumnName: 'id' }])
   @Field(() => User, { nullable: true })
   Sender: User;
 
-  @ManyToOne(() => User, (user) => user.AsReceiver, { nullable: true })
+  @ManyToOne((type) => User, (user) => user.AsReceiver, {
+    nullable: true,
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
   @Field(() => User, { nullable: true })
+  @JoinColumn([{ name: 'ReceiverId', referencedColumnName: 'id' }])
   Receiver: User;
+
+  @ManyToOne((type) => Chat, (chat) => chat.messages, {
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
+  @Field(() => Chat)
+  @JoinColumn([{ name: 'ChatId', referencedColumnName: 'id' }])
+  Chat: Chat;
 }

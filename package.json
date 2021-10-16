@@ -41,10 +41,13 @@
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "graphql": "^15.6.1",
+    "graphql-subscriptions": "^1.2.1",
+    "graphql-ws": "^5.5.0",
     "pg": "^8.7.1",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
+    "subscriptions-transport-ws": "^0.9.19",
     "typeorm": "^0.2.38"
   },
   "devDependencies": {

@@ -17,7 +17,7 @@ export class MarketService {
     try {
       const res = await this.marketRepository.findOne({
         where: { id },
-        relations: ['User'],
+        relations: ['User', 'Image'],
       });
       return res;
     } catch (err) {
@@ -47,6 +47,7 @@ export class MarketService {
       market.price = price;
       market.location = location;
       market.status = status;
+      market.thumbnail = images ? images[0] : null;
       const savedMarket = await this.marketRepository.save(market);
       if (images) {
         for (let i = 0; i < images.length; i++) {

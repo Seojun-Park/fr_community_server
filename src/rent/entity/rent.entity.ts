@@ -42,7 +42,7 @@ export class Rent {
 
   @Column()
   @Field()
-  spuare: string;
+  square: string;
 
   @Column()
   @Field()
@@ -53,12 +53,16 @@ export class Rent {
   option: string;
 
   @Column()
-  @Field()
-  fee: boolean;
+  @Field(() => Boolean)
+  commission: boolean;
 
   @Column()
-  @Field()
+  @Field(() => Boolean)
   guarantor: boolean;
+
+  @Column()
+  @Field({ nullable: true })
+  thumbnail?: string;
 
   @Column({ name: 'UserId' })
   UserId: number;

@@ -5,10 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Board } from './entity/board.entity';
 import { User } from '../user/entity/user.entity';
 import { Reply } from '../reply/entity/reply.entity';
-import { ImageService } from '../image/image.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Board, User, Reply])],
-  providers: [BoardService, BoardResolver, ImageService],
+  providers: [BoardService, BoardResolver],
 })
 export class BoardModule {}

@@ -27,14 +27,6 @@ type Board {
   Replies: [Reply!]
 }
 
-type Chat {
-  id: Int!
-  createdAt: String!
-  updatedAt: String!
-  deletedAt: String
-  Members: [User!]!
-}
-
 type Dm {
   id: Int!
   content: String!
@@ -43,8 +35,19 @@ type Dm {
   deletedAt: String
   SenderId: Float
   ReceiverId: Float
+  ChatId: Int!
   Sender: User
   Receiver: User
+  Chat: Chat!
+}
+
+type Chat {
+  id: Int!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  Members: [User!]!
+  messages: [Dm!]!
 }
 
 type Rent {
@@ -54,11 +57,12 @@ type Rent {
   price: String!
   deposit: String!
   type: String!
-  spuare: String!
+  square: String!
   address: String!
   option: String!
-  fee: Boolean!
+  commission: Boolean!
   guarantor: Boolean!
+  thumbnail: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -85,6 +89,7 @@ type Market {
   price: String!
   location: String!
   status: String!
+  thumbnail: String!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -147,6 +152,42 @@ type MarketsReturn {
   data: [Market!]
 }
 
+type RentReturn {
+  success: Boolean!
+  error: String
+  data: Rent
+}
+
+type RentsReturn {
+  success: Boolean!
+  error: String
+  data: [Rent!]
+}
+
+type DmReturn {
+  success: Boolean!
+  error: String
+  data: Dm
+}
+
+type ChatReturn {
+  success: Boolean!
+  error: String
+  data: Chat
+}
+
+type ChatsReturn {
+  success: Boolean!
+  error: String
+  data: [Chat!]
+}
+
+type ReplyReturn {
+  success: Boolean!
+  error: String
+  data: Reply
+}
+
 type Query {
   getUser(id: Int!): UserReturn!
   getUsers: UsersReturn!
@@ -154,6 +195,10 @@ type Query {
   getBoards: BoardsReturn!
   getMarket(id: Int!): MarketReturn!
   getMarkets: MarketsReturn!
+  getRent(id: Int!): RentReturn!
+  getRents: RentsReturn!
+  getChat(chatId: Int!): ChatReturn!
+  getChats(userId: Int!): ChatsReturn!
 }
 
 type Mutation {
@@ -166,6 +211,16 @@ type Mutation {
   createMarket(args: CreateMarketInput!): MarketReturn!
   editMarket(args: EditMarketInput!): MarketReturn!
   deleteMarket(id: Int!): MarketReturn!
+  deleteImage(id: Int!): Boolean!
+  createRent(args: CreateRentInput!): RentReturn!
+  editRent(args: EditRentInput!): RentReturn!
+  deleteRent(id: Int!): RentReturn!
+  sendDm(args: CreateDmInput!): DmReturn!
+  createChat(args: CreateChatInput!): ChatReturn!
+  outChat(userID: Int!, chatId: Int!): ChatReturn!
+  createReply(args: CreateReplyInput!): ReplyReturn!
+  editReply(args: EditReplyInput!): ReplyReturn!
+  deleteReply(id: Int!): Boolean!
 }
 
 input CreateUserInput {
@@ -213,4 +268,59 @@ input EditMarketInput {
   price: String
   location: String
   status: String
+}
+
+input CreateRentInput {
+  title: String!
+  content: String!
+  price: String!
+  deposit: String!
+  type: String!
+  square: String!
+  address: String!
+  commission: Boolean!
+  guarantor: Boolean!
+  UserId: Int!
+  images: [String!]
+}
+
+input EditRentInput {
+  RentId: Int!
+  title: String
+  content: String
+  price: String
+  deposit: String
+  type: String
+  square: String
+  address: String
+  option: String
+  commission: Boolean
+  guarantor: Boolean
+}
+
+input CreateDmInput {
+  content: String!
+  ChatId: Int
+  SenderId: Int!
+  ReceiverId: Int!
+}
+
+input CreateChatInput {
+  SenderId: Int!
+  ReceiverId: Int!
+}
+
+input CreateReplyInput {
+  BoardId: Int!
+  UserId: Int!
+  content: String!
+}
+
+input EditReplyInput {
+  BoardId: Int!
+  content: String
+}
+
+type Subscription {
+  dmSubscription: Dm!
 }

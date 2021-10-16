@@ -21,6 +21,18 @@ import { ReplyModule } from './reply/reply.module';
     ConfigModule.forRoot(),
     GraphQLModule.forRoot({
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
+      installSubscriptionHandlers: true,
+      subscriptions: {
+        'subscriptions-transport-ws': {
+          path: '/graphql',
+          onConnect: (connectionParams) => {
+            console.log(connectionParams);
+          },
+        },
+      },
+      context: ({ connection }) => {
+        console.log(connection);
+      },
     }),
     TypeOrmModule.forRoot(ormconfig),
     UserModule,
