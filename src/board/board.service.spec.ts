@@ -72,7 +72,7 @@ describe('BoardService', () => {
   });
 
   it('Should return not found board', () => {
-    expect(service.getBoard(2)).resolves.toBe('no Board found');
+    expect(service.getBoard(3)).resolves.toBe('no Board found');
   });
 
   it('Should return all boards', () => {
