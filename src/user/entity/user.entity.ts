@@ -1,6 +1,7 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -20,7 +21,7 @@ import { Reply } from '../../reply/entity/reply.entity';
 
 @Entity()
 @ObjectType()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field((type) => Int)
   id: number;

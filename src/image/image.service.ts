@@ -17,4 +17,24 @@ export class ImageService {
       return err.message;
     }
   }
+
+  async addImage(
+    id: number,
+    type: string,
+    url: string,
+  ): Promise<Image | string> {
+    try {
+      const image = new Image();
+      image.url = url;
+      if (type === 'market') {
+        image.MarketId = id;
+      } else {
+        image.RentId = id;
+      }
+      const savedImage = await this.imageRepository.save(image);
+      return savedImage;
+    } catch (err) {
+      return err.message;
+    }
+  }
 }

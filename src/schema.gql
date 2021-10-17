@@ -152,6 +152,11 @@ type MarketsReturn {
   data: [Market!]
 }
 
+type ImageReturn {
+  success: Boolean!
+  error: String
+}
+
 type RentReturn {
   success: Boolean!
   error: String
@@ -211,7 +216,8 @@ type Mutation {
   createMarket(args: CreateMarketInput!): MarketReturn!
   editMarket(args: EditMarketInput!): MarketReturn!
   deleteMarket(id: Int!): MarketReturn!
-  deleteImage(id: Int!): Boolean!
+  deleteImage(id: Int!): ImageReturn!
+  addImage(url: String!, type: String!, id: Int!): ImageReturn!
   createRent(args: CreateRentInput!): RentReturn!
   editRent(args: EditRentInput!): RentReturn!
   deleteRent(id: Int!): RentReturn!

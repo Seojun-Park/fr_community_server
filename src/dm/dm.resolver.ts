@@ -11,7 +11,6 @@ export class DmResolver {
   constructor(private dmService: DmService) {}
 
   @Subscription((returns) => Dm)
-  // @Subscription('sendDm')
   dmSubscription() {
     return pubSub.asyncIterator('dmSubscription');
   }

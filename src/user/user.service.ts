@@ -52,9 +52,9 @@ export class UserService {
         nickname,
         password: hashedPassword,
       });
-      await this.userRepository.save(newUser);
+      const savedUser = await this.userRepository.save(newUser);
       if (!newUser) return `Can't create an user`;
-      return newUser;
+      return savedUser;
     } catch (err) {
       return err.message;
     }
@@ -79,8 +79,8 @@ export class UserService {
       user.firstName = firstName || prevValue.firstName;
       user.lastName = lastName || prevValue.lastName;
       user.nickname = nickname || prevValue.nickname;
-      await this.userRepository.save(user);
-      return user;
+      const savedUser = await this.userRepository.save(user);
+      return savedUser;
     } catch (err) {
       return err.message;
     }
@@ -100,8 +100,8 @@ export class UserService {
       if (!pwdCheck) return 'password is not matched';
       const hashedPassword = await bcrypt.hash(newPassword, 10);
       user.password = hashedPassword;
-      await this.userRepository.save(user);
-      return user;
+      const savedUser = await this.userRepository.save(user);
+      return savedUser;
     } catch (err) {
       return err.message;
     }

@@ -9,5 +9,6 @@ import { User } from '../user/entity/user.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Reply, Board, User])],
   providers: [ReplyService, ReplyResolver],
+  exports: [ReplyService],
 })
 export class ReplyModule {}

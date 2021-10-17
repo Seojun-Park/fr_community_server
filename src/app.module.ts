@@ -1,3 +1,6 @@
+import AdminJS from 'adminjs';
+import { AdminModule } from '@adminjs/nestjs';
+import { Database, Resource } from '@adminjs/typeorm';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
@@ -15,7 +18,13 @@ import * as ormconfig from '../ormconfig';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ReplyModule } from './reply/reply.module';
+import { User } from './user/entity/user.entity';
+import { Board } from './board/entity/board.entity';
+import { Market } from './market/entity/market.entity';
+import { Rent } from './rent/entity/rent.entity';
+import { Chat } from './chat/entity/chat.entity';
 
+AdminJS.registerAdapter({ Database, Resource });
 @Module({
   imports: [
     ConfigModule.forRoot(),
@@ -33,6 +42,10 @@ import { ReplyModule } from './reply/reply.module';
       context: ({ connection }) => {
         console.log(connection);
       },
+      cors: {
+        origin: 'http://localhost:4000',
+        credentials: true,
+      },
     }),
     TypeOrmModule.forRoot(ormconfig),
     UserModule,
@@ -43,6 +56,18 @@ import { ReplyModule } from './reply/reply.module';
     DmModule,
     ChatModule,
     ReplyModule,
+    AdminModule.createAdmin({
+      adminJsOptions: {
+        rootPath: '/admin',
+        resources: [User, Market, Board, Rent, Chat],
+      },
+      auth: {
+        authenticate: async (email, password) =>
+          Promise.resolve({ email: process.env.ADMIN_ID }),
+        cookieName: process.env.COOKIE_NAME,
+        cookiePassword: process.env.ADMIN_PASS,
+      },
+    } as any),
   ],
   controllers: [AppController],
   providers: [AppService],

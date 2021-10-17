@@ -9,6 +9,6 @@ import { Image } from '../image/entity/image.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Market, User, Image])],
   providers: [MarketService, MarketResolver],
-  exports: [MarketService, MarketResolver],
+  exports: [MarketService],
 })
 export class MarketModule {}

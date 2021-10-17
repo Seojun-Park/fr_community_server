@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import {
+  BaseEntity,
   Column,
   CreateDateColumn,
   DeleteDateColumn,
@@ -15,7 +16,7 @@ import { User } from '../../user/entity/user.entity';
 
 @Entity()
 @ObjectType()
-export class Market {
+export class Market extends BaseEntity {
   @PrimaryGeneratedColumn()
   @Field((type) => Int)
   id: number;
@@ -45,7 +46,7 @@ export class Market {
   status: string;
 
   @Column()
-  @Field()
+  @Field({ nullable: true })
   thumbnail: string;
 
   @CreateDateColumn()

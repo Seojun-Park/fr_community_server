@@ -9,5 +9,6 @@ import { Image } from '../image/entity/image.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Rent, Image, User])],
   providers: [RentService, RentResolver],
+  exports: [RentService],
 })
 export class RentModule {}
