@@ -2,52 +2,27 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Reply {
-  id: Int!
-  content: String!
-  createdAt: String!
-  updatedAt: String!
-  deletedAt: String
-  BoardId: Int!
-  Board: Board!
-  UserId: User!
-  User: User!
-}
-
-type Board {
+type Market {
   id: Int!
   title: String!
   content: String!
-  category: String!
-  createdAt: String!
-  updatedAt: String!
-  WriterId: Int!
-  deletedAt: String
-  Writer: User!
-  Replies: [Reply!]
-}
+  UserId: Int!
 
-type Dm {
-  id: Int!
-  content: String!
-  createdAt: String!
-  updatedAt: String!
-  deletedAt: String
-  SenderId: Float
-  ReceiverId: Float
-  ChatId: Int!
-  Sender: User
-  Receiver: User
-  Chat: Chat!
-}
+  """euro currency"""
+  price: String!
+  location: String!
 
-type Chat {
-  id: Int!
+  """deal type buy / sell"""
+  type: String!
+
+  """deal status sold / onSale"""
+  status: String!
+  thumbnail: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String
-  Members: [User!]!
-  messages: [Dm!]!
+  User: User!
+  Images: [Image!]
 }
 
 type Rent {
@@ -88,33 +63,77 @@ type Image {
   url: String!
   MarketId: Int
   RentId: Int
+  BoardId: Int
   createdAt: String!
   updatedAt: String!
   deletedAt: String
   Market: Market!
 }
 
-type Market {
+type Reply {
   id: Int!
-  title: String!
   content: String!
-  UserId: Int!
-
-  """euro currency"""
-  price: String!
-  location: String!
-
-  """deal type buy / sell"""
-  type: String!
-
-  """deal status sold / onSale"""
-  status: String!
-  thumbnail: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String
+  BoardId: Int!
+  Board: Board!
+  UserId: User!
   User: User!
+}
+
+type Board {
+  id: Int!
+  title: String!
+  content: String!
+  category: String!
+  createdAt: String!
+  updatedAt: String!
+  WriterId: Int!
+  deletedAt: String
+  Writer: User!
+  Replies: [Reply!]
   Images: [Image!]
+}
+
+type Dm {
+  id: Int!
+  content: String!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  SenderId: Float
+  ReceiverId: Float
+  ChatId: Int!
+  Sender: User
+  Receiver: User
+  Chat: Chat!
+}
+
+type Chat {
+  id: Int!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  Members: [User!]!
+  messages: [Dm!]!
+}
+
+type Recruit {
+  id: Int!
+  title: String!
+  content: String!
+  period: String!
+  location: String!
+  salary: String!
+
+  """recruting type hiring / searching / done"""
+  type: String!
+  OwnerId: Int!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  Owner: User!
 }
 
 type User {
@@ -133,6 +152,7 @@ type User {
   AsSender: [Dm!]
   AsReceiver: [Dm!]
   Replies: [Reply!]
+  Recruits: [Recruit!]
   Chats: [Chat!]!
 }
 
@@ -213,6 +233,18 @@ type ReplyReturn {
   data: Reply
 }
 
+type RecruitReturn {
+  success: Boolean!
+  error: String
+  data: Recruit
+}
+
+type RecruitsReturn {
+  success: Boolean!
+  error: String
+  data: [Recruit!]
+}
+
 type Query {
   getUser(id: Int!): UserReturn!
   getUsers: UsersReturn!
@@ -224,6 +256,8 @@ type Query {
   getRents: RentsReturn!
   getChat(chatId: Int!): ChatReturn!
   getChats(userId: Int!): ChatsReturn!
+  getRecruit(id: Int!): RecruitReturn!
+  getRecruits: RecruitsReturn!
 }
 
 type Mutation {
@@ -247,6 +281,9 @@ type Mutation {
   createReply(args: CreateReplyInput!): ReplyReturn!
   editReply(args: EditReplyInput!): ReplyReturn!
   deleteReply(id: Int!): Boolean!
+  createRecruit(args: CreateRecruitInput!): RecruitReturn!
+  editRecruit(args: EditRecruitInput!): RecruitReturn!
+  deleteRecruit(id: Int!): RecruitReturn!
 }
 
 input CreateUserInput {
@@ -269,6 +306,7 @@ input CreateBoardInput {
   title: String!
   content: String!
   category: String!
+  images: [String!]
 }
 
 input EditBoardInput {
@@ -358,6 +396,26 @@ input CreateReplyInput {
 input EditReplyInput {
   BoardId: Int!
   content: String
+}
+
+input CreateRecruitInput {
+  UserId: Int!
+  title: String!
+  content: String!
+  period: String!
+  location: String!
+  salary: String!
+  type: String!
+}
+
+input EditRecruitInput {
+  RecruitId: Int!
+  title: String
+  content: String
+  period: String
+  location: String
+  salary: String
+  type: String
 }
 
 type Subscription {
