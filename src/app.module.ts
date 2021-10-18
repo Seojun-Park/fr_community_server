@@ -62,7 +62,7 @@ AdminJS.registerAdapter({ Database, Resource });
     AdminModule.createAdmin({
       adminJsOptions: {
         rootPath: '/admin',
-        resources: [User, Market, Board, Rent, Chat, Recruit, Image],
+        resources: [User, Market, Board, Rent, Chat, Recruit],
       },
       auth: {
         authenticate: async (email, password) =>

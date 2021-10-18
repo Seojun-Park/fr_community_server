@@ -11,7 +11,10 @@ async function bootstrap() {
     }),
   );
 
-  app.enableCors();
+  app.enableCors({
+    origin: true,
+    credentials: true,
+  });
   app.use(
     helmet({
       contentSecurityPolicy:
