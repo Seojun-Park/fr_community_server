@@ -21,7 +21,19 @@ export class EditRentInput {
   deposit?: string;
 
   @Field({ nullable: true })
-  type?: string;
+  type?: 'studio' | 'apartment' | 'house';
+
+  @Field({ nullable: true })
+  heatType?: 'central' | 'individual';
+
+  @Field({ nullable: true })
+  term?: 'long' | 'short';
+
+  @Field({ nullable: true })
+  allocation?: boolean;
+
+  @Field({ nullable: true })
+  availableFrom?: string;
 
   @Field({ nullable: true })
   square?: string;
@@ -30,7 +42,10 @@ export class EditRentInput {
   address?: string;
 
   @Field({ nullable: true })
-  option?: string;
+  option?: 'single' | 'colocation' | 'sous-location';
+
+  @Field(() => Boolean, { nullable: true })
+  proof: boolean;
 
   @Field(() => Boolean, { nullable: true })
   commission?: boolean;

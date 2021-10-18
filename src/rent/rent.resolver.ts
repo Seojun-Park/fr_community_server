@@ -7,7 +7,7 @@ import { RentService } from './rent.service';
 
 @Resolver((of) => Rent)
 export class RentResolver {
-  constructor(private rentService: RentService) {}
+  constructor(private readonly rentService: RentService) {}
 
   @Query((returns) => RentReturn)
   async getRent(
@@ -34,7 +34,7 @@ export class RentResolver {
   @Mutation((returns) => RentReturn)
   async createRent(
     @Args('args', { type: () => CreateRentInput }) args: CreateRentInput,
-  ) {
+  ): Promise<RentReturn> {
     const res = await this.rentService.createRent(args);
     return {
       success: typeof res === 'string' ? false : true,
@@ -46,7 +46,7 @@ export class RentResolver {
   @Mutation((returns) => RentReturn)
   async editRent(
     @Args('args', { type: () => EditRentInput }) args: EditRentInput,
-  ) {
+  ): Promise<RentReturn> {
     const res = await this.rentService.editRent(args);
     return {
       success: typeof res === 'string' ? false : true,

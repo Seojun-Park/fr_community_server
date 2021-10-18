@@ -38,17 +38,24 @@ export class RentService {
   }
 
   async createRent(args: CreateRentInput): Promise<Rent | string> {
+    console.log(' do you even come in?');
     try {
       const {
         title,
         content,
-        commission,
         price,
         deposit,
         type,
+        term,
+        heatType,
         square,
         address,
+        option,
+        allocation,
+        proof,
+        commission,
         guarantor,
+        availableFrom,
         UserId,
         images,
       } = args;
@@ -64,13 +71,18 @@ export class RentService {
       rent.guarantor = guarantor;
       rent.UserId = UserId;
       rent.thumbnail = images ? images[0] : null;
+      rent.allocation = allocation;
+      rent.availableFrom = availableFrom;
+      rent.proof = proof;
+      rent.option = option;
+      rent.term = term;
+      rent.heatType = heatType;
       const savedRent = await this.rentRepository.save(rent);
       if (images) {
         for (let i = 0; i < images.length; i++) {
           const newImage = new Image();
           newImage.url = images[i];
           newImage.RentId = savedRent.id;
-
           await this.imageRepository.save(newImage);
         }
       }
@@ -94,6 +106,11 @@ export class RentService {
         option,
         commission,
         guarantor,
+        heatType,
+        term,
+        proof,
+        availableFrom,
+        allocation,
       } = args;
       const rent = await this.rentRepository.findOne({ where: { id: RentId } });
       if (!rent) return 'no Rent Found';
@@ -108,6 +125,11 @@ export class RentService {
         option: string;
         commission: boolean;
         guarantor: boolean;
+        heatType: string;
+        term: string;
+        proof: boolean;
+        availableFrom: string;
+        allocation: boolean;
       } = {
         title: rent.title,
         content: rent.content,
@@ -119,6 +141,11 @@ export class RentService {
         option: rent.option,
         commission: rent.commission,
         guarantor: rent.guarantor,
+        heatType: rent.heatType,
+        term: rent.term,
+        proof: rent.proof,
+        availableFrom: rent.availableFrom,
+        allocation: rent.allocation,
       };
       rent.title = title || prevValue.title;
       rent.content = content || prevValue.content;
@@ -130,6 +157,11 @@ export class RentService {
       rent.option = option || prevValue.option;
       rent.commission = commission || prevValue.commission;
       rent.guarantor = guarantor || prevValue.guarantor;
+      rent.heatType = heatType || prevValue.heatType;
+      rent.term = term || prevValue.term;
+      rent.proof = proof || prevValue.proof;
+      rent.availableFrom = availableFrom || prevValue.availableFrom;
+      rent.allocation = allocation || prevValue.allocation;
       const savedRent = await this.rentRepository.save(rent);
       return savedRent;
     } catch (err) {

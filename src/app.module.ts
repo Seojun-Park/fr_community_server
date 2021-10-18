@@ -34,14 +34,14 @@ AdminJS.registerAdapter({ Database, Resource });
       subscriptions: {
         'subscriptions-transport-ws': {
           path: '/graphql',
-          onConnect: (connectionParams) => {
-            console.log(connectionParams);
-          },
+          // onConnect: (connectionParams) => {
+          //   console.log(connectionParams);
+          // },
         },
       },
-      context: ({ connection }) => {
-        console.log(connection);
-      },
+      // context: ({ connection }) => {
+      //   console.log(connection);
+      // },
       cors: {
         origin: 'http://localhost:4000',
         credentials: true,

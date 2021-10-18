@@ -34,7 +34,7 @@ export class MarketResolver {
   @Mutation((returns) => MarketReturn)
   async createMarket(
     @Args('args', { type: () => CreateMarketInput }) args: CreateMarketInput,
-  ) {
+  ): Promise<MarketReturn> {
     const res = await this.marketService.createMarket(args);
     return {
       success: typeof res === 'string' ? false : true,
@@ -46,7 +46,7 @@ export class MarketResolver {
   @Mutation((returns) => MarketReturn)
   async editMarket(
     @Args('args', { type: () => EditMarketInput }) args: EditMarketInput,
-  ) {
+  ): Promise<MarketReturn> {
     const res = await this.marketService.editMarket(args);
     return {
       success: typeof res === 'string' ? false : true,

@@ -34,7 +34,7 @@ export class Market extends BaseEntity {
   UserId: number;
 
   @Column()
-  @Field()
+  @Field({ description: 'euro' })
   price: string;
 
   @Column()

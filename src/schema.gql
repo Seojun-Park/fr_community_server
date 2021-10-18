@@ -56,12 +56,25 @@ type Rent {
   content: String!
   price: String!
   deposit: String!
+
+  """type of residence such as studio / apartment / house"""
   type: String!
+
+  """rent period such as long / short"""
+  term: String!
+
+  """heat type such as central / individual"""
+  heatType: String!
   square: String!
   address: String!
+
+  """form of residence single / colocation / sous-location"""
   option: String!
+  allocation: Boolean!
+  proof: Boolean!
   commission: Boolean!
   guarantor: Boolean!
+  availableFrom: String!
   thumbnail: String
   createdAt: String!
   updatedAt: String!
@@ -86,10 +99,12 @@ type Market {
   title: String!
   content: String!
   UserId: Int!
+
+  """euro"""
   price: String!
   location: String!
   status: String!
-  thumbnail: String!
+  thumbnail: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -284,8 +299,14 @@ input CreateRentInput {
   type: String!
   square: String!
   address: String!
+  heatType: String!
+  term: String!
+  option: String!
+  allocation: Boolean!
+  availableFrom: String!
   commission: Boolean!
   guarantor: Boolean!
+  proof: Boolean!
   UserId: Int!
   images: [String!]
 }
@@ -297,9 +318,14 @@ input EditRentInput {
   price: String
   deposit: String
   type: String
+  heatType: String
+  term: String
+  allocation: Boolean
+  availableFrom: String
   square: String
   address: String
   option: String
+  proof: Boolean
   commission: Boolean
   guarantor: Boolean
 }

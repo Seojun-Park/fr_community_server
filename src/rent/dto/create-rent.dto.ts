@@ -45,6 +45,31 @@ export class CreateRentInput {
   address: string;
 
   @IsNotEmpty()
+  @IsString()
+  @Field()
+  heatType: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  term: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  option: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  @Field(() => Boolean)
+  allocation: boolean;
+
+  @IsNotEmpty()
+  @IsString()
+  @Field()
+  availableFrom: string;
+
+  @IsNotEmpty()
   @IsBoolean()
   @Field(() => Boolean)
   commission: boolean;
@@ -53,6 +78,11 @@ export class CreateRentInput {
   @IsBoolean()
   @Field(() => Boolean)
   guarantor: boolean;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  @Field(() => Boolean)
+  proof: boolean;
 
   @IsNotEmpty()
   @IsNumber()
