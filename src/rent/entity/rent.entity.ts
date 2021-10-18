@@ -37,35 +37,35 @@ export class Rent extends BaseEntity {
   @Field()
   deposit: string;
 
-  // @Column({
-  //   type: 'enum',
-  //   name: 'type',
-  //   enum: ['studio', 'apartment', 'house'],
-  //   default: ['studio'],
-  // })
-  @Column()
+  @Column({
+    type: 'enum',
+    name: 'type',
+    enum: ['studio', 'apartment', 'house'],
+    default: ['studio'],
+  })
+  // @Column()
   @Field({
     description: 'type of residence such as studio / apartment / house',
   })
   type: string;
 
-  // @Column({
-  //   type: 'enum',
-  //   name: 'term',
-  //   enum: ['long', 'short'],
-  //   default: ['long'],
-  // })
-  @Column()
+  @Column({
+    type: 'enum',
+    name: 'term',
+    enum: ['long', 'short'],
+    default: ['long'],
+  })
+  // @Column()
   @Field({ description: 'rent period such as long / short' })
   term: string;
 
-  // @Column({
-  //   type: 'enum',
-  //   name: 'heatType',
-  //   enum: ['central', 'individual'],
-  //   default: 'central',
-  // })
-  @Column()
+  @Column({
+    type: 'enum',
+    name: 'heatType',
+    enum: ['central', 'individual'],
+    default: 'central',
+  })
+  // @Column()
   @Field({ description: 'heat type such as central / individual' })
   heatType: string;
 
@@ -77,13 +77,13 @@ export class Rent extends BaseEntity {
   @Field()
   address: string;
 
-  // @Column({
-  //   type: 'enum',
-  //   name: 'option',
-  //   enum: ['single', 'colocation', 'sous-location'],
-  //   default: ['single'],
-  // })
-  @Column()
+  @Column({
+    type: 'enum',
+    name: 'option',
+    enum: ['single', 'colocation', 'sous-location'],
+    default: ['single'],
+  })
+  // @Column()
   @Field({
     description: 'form of residence single / colocation / sous-location',
   })

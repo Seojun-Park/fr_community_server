@@ -23,6 +23,9 @@ import { Board } from './board/entity/board.entity';
 import { Market } from './market/entity/market.entity';
 import { Rent } from './rent/entity/rent.entity';
 import { Chat } from './chat/entity/chat.entity';
+import { RecruitModule } from './recruit/recruit.module';
+import { Recruit } from './recruit/entity/recruit.entity';
+import { Image } from './image/entity/image.entity';
 
 AdminJS.registerAdapter({ Database, Resource });
 @Module({
@@ -59,7 +62,7 @@ AdminJS.registerAdapter({ Database, Resource });
     AdminModule.createAdmin({
       adminJsOptions: {
         rootPath: '/admin',
-        resources: [User, Market, Board, Rent, Chat],
+        resources: [User, Market, Board, Rent, Chat, Recruit, Image],
       },
       auth: {
         authenticate: async (email, password) =>
@@ -68,6 +71,7 @@ AdminJS.registerAdapter({ Database, Resource });
         cookiePassword: process.env.ADMIN_PASS,
       },
     } as any),
+    RecruitModule,
   ],
   controllers: [AppController],
   providers: [AppService],

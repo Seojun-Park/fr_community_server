@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { Image } from '../image/entity/image.entity';
 import { CreateBoardInput } from './dto/create-board.input';
 import { EditBoardInput } from './dto/edit-board.input';
 import { Board } from './entity/board.entity';
@@ -9,6 +10,7 @@ import { Board } from './entity/board.entity';
 export class BoardService {
   constructor(
     @InjectRepository(Board) private boardRepository: Repository<Board>,
+    @InjectRepository(Image) private imageRepository: Repository<Image>,
   ) {}
 
   async getBoard(id: number): Promise<Board | string> {
@@ -39,7 +41,7 @@ export class BoardService {
 
   async createBoard(args: CreateBoardInput): Promise<Board | string> {
     try {
-      const { UserId, title, content, category } = args;
+      const { UserId, title, content, category, images } = args;
       const writer: Board | undefined = await this.boardRepository.findOne({
         where: { id: UserId },
       });
@@ -49,8 +51,16 @@ export class BoardService {
       board.title = title;
       board.content = content;
       board.category = category;
-      await this.boardRepository.save(board);
-      return board;
+      const savedBoard = await this.boardRepository.save(board);
+      if (images) {
+        for (let i = 0; i < images.length; i++) {
+          const newImage = new Image();
+          newImage.url = images[i];
+          newImage.BoardId = savedBoard.id;
+          await this.imageRepository.save(newImage);
+        }
+      }
+      return savedBoard;
     } catch (err) {
       return err.message;
     }

@@ -9,6 +9,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Board } from '../../board/entity/board.entity';
 import { Market } from '../../market/entity/market.entity';
 import { Rent } from '../../rent/entity/rent.entity';
 
@@ -31,6 +32,10 @@ export class Image {
   @Field(() => Int, { nullable: true })
   RentId: number;
 
+  @Column({ name: 'BoardId', nullable: true })
+  @Field(() => Int, { nullable: true })
+  BoardId: number;
+
   @CreateDateColumn()
   @Field()
   createdAt: string;
@@ -46,6 +51,7 @@ export class Image {
   @ManyToOne(() => Market, (market) => market.Images, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
+    nullable: true,
   })
   @JoinColumn([{ name: 'MarketId', referencedColumnName: 'id' }])
   @Field(() => Market)
@@ -54,7 +60,16 @@ export class Image {
   @ManyToOne(() => Rent, (rent) => rent.Images, {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
+    nullable: true,
   })
   @JoinColumn([{ name: 'RentId', referencedColumnName: 'id' }])
   Rent: Rent;
+
+  @ManyToOne(() => Board, (board) => board.Images, {
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+    nullable: true,
+  })
+  @JoinColumn([{ name: 'BoardId', referencedColumnName: 'id' }])
+  Board: Rent;
 }

@@ -100,9 +100,14 @@ type Market {
   content: String!
   UserId: Int!
 
-  """euro"""
+  """euro currency"""
   price: String!
   location: String!
+
+  """deal type buy / sell"""
+  type: String!
+
+  """deal status sold / onSale"""
   status: String!
   thumbnail: String
   createdAt: String!
@@ -277,6 +282,7 @@ input CreateMarketInput {
   title: String!
   content: String!
   price: String!
+  type: String!
   status: String!
   location: String!
   images: [String!]
@@ -289,6 +295,7 @@ input EditMarketInput {
   price: String
   location: String
   status: String
+  type: String
 }
 
 input CreateRentInput {

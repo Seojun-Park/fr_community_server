@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Image } from '../image/entity/image.entity';
 import { Reply } from '../reply/entity/reply.entity';
 import { User } from '../user/entity/user.entity';
 import { BoardService } from './board.service';
@@ -33,6 +34,7 @@ class MockBoardRepository {
 
 class MockUserRepository {}
 class MockReplyRepository {}
+class MockImageRepository {}
 
 describe('BoardService', () => {
   let service: BoardService;
@@ -52,6 +54,10 @@ describe('BoardService', () => {
         {
           provide: getRepositoryToken(Reply),
           useClass: MockReplyRepository,
+        },
+        {
+          provide: getRepositoryToken(Image),
+          useClass: MockImageRepository,
         },
       ],
     }).compile();

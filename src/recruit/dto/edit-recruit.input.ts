@@ -2,11 +2,11 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsNotEmpty, IsNumber } from 'class-validator';
 
 @InputType()
-export class EditMarketInput {
+export class EditRecruitInput {
   @IsNotEmpty()
   @IsNumber()
-  @Field(() => Int)
-  MarketId: number;
+  @Field((type) => Int)
+  RecruitId: number;
 
   @Field({ nullable: true })
   title?: string;
@@ -15,13 +15,13 @@ export class EditMarketInput {
   content?: string;
 
   @Field({ nullable: true })
-  price?: string;
+  period?: string;
 
   @Field({ nullable: true })
   location?: string;
 
   @Field({ nullable: true })
-  status?: string;
+  salary?: string;
 
   @Field({ nullable: true })
   type?: string;

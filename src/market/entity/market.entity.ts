@@ -34,20 +34,32 @@ export class Market extends BaseEntity {
   UserId: number;
 
   @Column()
-  @Field({ description: 'euro' })
+  @Field({ description: 'euro currency' })
   price: string;
 
   @Column()
   @Field()
   location: string;
 
-  @Column()
-  @Field()
+  @Column({
+    type: 'enum',
+    name: 'type',
+    enum: ['buy', 'sell'],
+  })
+  @Field({ description: 'deal type buy / sell' })
+  type: string;
+
+  @Column({
+    type: 'enum',
+    name: 'status',
+    enum: ['sold', 'onSale'],
+  })
+  @Field({ description: 'deal status sold / onSale' })
   status: string;
 
   @Column()
   @Field({ nullable: true })
-  thumbnail: string;
+  thumbnail?: string;
 
   @CreateDateColumn()
   @Field()

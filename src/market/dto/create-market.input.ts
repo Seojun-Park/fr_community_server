@@ -21,6 +21,10 @@ export class CreateMarketInput {
 
   @IsNotEmpty()
   @Field()
+  type: string;
+
+  @IsNotEmpty()
+  @Field()
   status: string;
 
   @IsNotEmpty()

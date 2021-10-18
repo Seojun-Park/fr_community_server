@@ -1,27 +1,33 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 @InputType()
-export class CreateBoardInput {
+export class CreateRecruitInput {
   @IsNotEmpty()
   @Field((type) => Int)
   UserId: number;
 
-  @IsString()
   @IsNotEmpty()
   @Field()
   title: string;
 
-  @IsString()
   @IsNotEmpty()
   @Field()
   content: string;
 
-  @IsString()
   @IsNotEmpty()
   @Field()
-  category: string;
+  period: string;
 
-  @Field(() => [String], { nullable: true })
-  images?: string[];
+  @IsNotEmpty()
+  @Field()
+  location: string;
+
+  @IsNotEmpty()
+  @Field()
+  salary: string;
+
+  @IsNotEmpty()
+  @Field()
+  type: string;
 }

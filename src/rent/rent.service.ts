@@ -38,7 +38,6 @@ export class RentService {
   }
 
   async createRent(args: CreateRentInput): Promise<Rent | string> {
-    console.log(' do you even come in?');
     try {
       const {
         title,
@@ -70,9 +69,9 @@ export class RentService {
       rent.address = address;
       rent.guarantor = guarantor;
       rent.UserId = UserId;
-      rent.thumbnail = images ? images[0] : null;
       rent.allocation = allocation;
       rent.availableFrom = availableFrom;
+      rent.thumbnail = images ? images[0] : '';
       rent.proof = proof;
       rent.option = option;
       rent.term = term;

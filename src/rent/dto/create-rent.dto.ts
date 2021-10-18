@@ -89,7 +89,6 @@ export class CreateRentInput {
   @Field(() => Int)
   UserId: number;
 
-  @IsArray()
   @Field(() => [String], { nullable: true })
-  images: string[];
+  images?: string[];
 }

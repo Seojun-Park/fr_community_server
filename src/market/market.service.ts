@@ -39,13 +39,15 @@ export class MarketService {
 
   async createMarket(args: CreateMarketInput) {
     try {
-      const { UserId, title, content, price, location, images, status } = args;
+      const { UserId, title, content, price, location, images, status, type } =
+        args;
       const market = new Market();
       market.UserId = UserId;
       market.title = title;
       market.content = content;
       market.price = price;
       market.location = location;
+      market.type = type;
       market.status = status;
       market.thumbnail = images ? images[0] : null;
       const savedMarket = await this.marketRepository.save(market);
@@ -65,7 +67,7 @@ export class MarketService {
 
   async editMarket(args: EditMarketInput) {
     try {
-      const { MarketId, title, content, price, location, status } = args;
+      const { MarketId, title, content, price, location, status, type } = args;
       const market = await this.marketRepository.findOne({
         where: { id: MarketId },
       });
@@ -76,18 +78,21 @@ export class MarketService {
         price: string;
         location: string;
         status: string;
+        type: string;
       } = {
         title: market.title,
         content: market.content,
         price: market.price,
         location: market.location,
         status: market.status,
+        type: market.type,
       };
       market.title = title || prevValue.title;
       market.content = content || prevValue.content;
       market.price = price || prevValue.price;
       market.location = location || prevValue.location;
-      market.status = location || prevValue.status;
+      market.status = status || prevValue.status;
+      market.type = type || prevValue.type;
       const savedMarket = await this.marketRepository.save(market);
       return savedMarket;
     } catch (err) {

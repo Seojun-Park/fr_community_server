@@ -11,6 +11,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Image } from '../../image/entity/image.entity';
 import { Reply } from '../../reply/entity/reply.entity';
 import { User } from '../../user/entity/user.entity';
 
@@ -60,4 +61,8 @@ export class Board extends BaseEntity {
   @OneToMany(() => Reply, (reply) => reply.Board, { nullable: true })
   @Field((type) => [Reply], { nullable: true })
   Replies: Reply[];
+
+  @OneToMany(() => Image, (image) => image.Board, { nullable: true })
+  @Field((type) => [Image], { nullable: true })
+  Images: Image[];
 }
