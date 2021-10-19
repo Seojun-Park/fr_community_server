@@ -25,7 +25,6 @@ import { Rent } from './rent/entity/rent.entity';
 import { Chat } from './chat/entity/chat.entity';
 import { RecruitModule } from './recruit/recruit.module';
 import { Recruit } from './recruit/entity/recruit.entity';
-import { Image } from './image/entity/image.entity';
 
 AdminJS.registerAdapter({ Database, Resource });
 @Module({
@@ -46,7 +45,7 @@ AdminJS.registerAdapter({ Database, Resource });
       //   console.log(connection);
       // },
       cors: {
-        origin: 'http://localhost:4000',
+        origin: process.env.COR_ORIGIN_DEV,
         credentials: true,
       },
     }),
