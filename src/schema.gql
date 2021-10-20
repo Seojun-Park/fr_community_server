@@ -51,6 +51,7 @@ type Rent {
   guarantor: Boolean!
   availableFrom: String!
   thumbnail: String
+  UserId: Int!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
@@ -119,6 +120,33 @@ type Chat {
   messages: [Dm!]!
 }
 
+type MeetMember {
+  MeetId: Int!
+  UserId: Int!
+  loggedInAt: String
+  Meet: Meet!
+  User: User!
+}
+
+type Meet {
+  id: Int!
+  title: String!
+  content: String!
+
+  """category type class / meetup"""
+  category: String!
+  price: String
+  period: String
+  location: String
+  maximum: String
+  OwnerId: Int!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  Owner: User!
+  MeetMember: [MeetMember!]
+}
+
 type Recruit {
   id: Int!
   title: String!
@@ -153,6 +181,8 @@ type User {
   AsReceiver: [Dm!]
   Replies: [Reply!]
   Recruits: [Recruit!]
+  Meets: [Meet!]
+  MeetMember: [MeetMember!]
   Chats: [Chat!]!
 }
 
@@ -245,6 +275,18 @@ type RecruitsReturn {
   data: [Recruit!]
 }
 
+type MeetReturn {
+  success: Boolean!
+  error: String
+  data: Meet
+}
+
+type MeetsReturn {
+  success: Boolean!
+  error: String
+  data: [Meet!]
+}
+
 type Query {
   getUser(id: Int!): UserReturn!
   getUsers: UsersReturn!
@@ -258,6 +300,8 @@ type Query {
   getChats(userId: Int!): ChatsReturn!
   getRecruit(id: Int!): RecruitReturn!
   getRecruits: RecruitsReturn!
+  getMeet(id: Int!): MeetReturn!
+  getMeets: MeetsReturn!
 }
 
 type Mutation {
@@ -269,7 +313,7 @@ type Mutation {
   deleteBoard(id: Int!): BoardReturn!
   createMarket(args: CreateMarketInput!): MarketReturn!
   editMarket(args: EditMarketInput!): MarketReturn!
-  deleteMarket(id: Int!): MarketReturn!
+  deleteMarket(id: Int!): Boolean!
   deleteImage(id: Int!): ImageReturn!
   addImage(url: String!, type: String!, id: Int!): ImageReturn!
   createRent(args: CreateRentInput!): RentReturn!
@@ -284,6 +328,12 @@ type Mutation {
   createRecruit(args: CreateRecruitInput!): RecruitReturn!
   editRecruit(args: EditRecruitInput!): RecruitReturn!
   deleteRecruit(id: Int!): RecruitReturn!
+  createMeet(args: CreateMeetInput!): MeetReturn!
+  editMeet(args: EditMeetInput!): MeetReturn!
+  deleteMeet(id: Int!): Boolean!
+  joinMeet(UserId: Int!, MeetId: Int!): Boolean!
+  exitMeet(UserId: Int!, MeetId: Int!): Boolean!
+  kickUserFromMeet(OwnerId: Int!, TargetId: Int!, MeetId: Int!): Boolean!
 }
 
 input CreateUserInput {
@@ -416,6 +466,27 @@ input EditRecruitInput {
   location: String
   salary: String
   type: String
+}
+
+input CreateMeetInput {
+  title: String!
+  content: String!
+  category: String!
+  price: String
+  period: String
+  location: String
+  maximum: String!
+  OwnerId: Int!
+}
+
+input EditMeetInput {
+  id: Int!
+  title: String
+  content: String
+  price: String
+  period: String
+  location: String
+  maximum: String
 }
 
 type Subscription {

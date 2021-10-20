@@ -16,6 +16,8 @@ import { Board } from '../../board/entity/board.entity';
 import { Chat } from '../../chat/entity/chat.entity';
 import { Dm } from '../../dm/entity/dm.entity';
 import { Market } from '../../market/entity/market.entity';
+import { Meet } from '../../meet/entity/meet.entity';
+import { MeetMember } from '../../meet/entity/meetMember.entity';
 import { Recruit } from '../../recruit/entity/recruit.entity';
 import { Rent } from '../../rent/entity/rent.entity';
 import { Reply } from '../../reply/entity/reply.entity';
@@ -96,6 +98,16 @@ export class User extends BaseEntity {
   @OneToMany(() => Recruit, (recruit) => recruit.Owner, { nullable: true })
   @Field(() => [Recruit], { nullable: true })
   Recruits: Recruit[];
+
+  @OneToMany(() => Meet, (meet) => meet.Owner, { nullable: true })
+  @Field(() => [Meet], { nullable: true })
+  Meets: Meet[];
+
+  @OneToMany(() => MeetMember, (meetMember) => meetMember.User, {
+    nullable: true,
+  })
+  @Field(() => [MeetMember], { nullable: true })
+  MeetMember: MeetMember[];
 
   @ManyToMany(() => Chat, (chat) => chat.Members)
   @JoinTable({

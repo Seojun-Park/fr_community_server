@@ -109,11 +109,12 @@ export class Rent extends BaseEntity {
   @Field()
   availableFrom: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field({ nullable: true })
   thumbnail?: string;
 
   @Column({ name: 'UserId' })
+  @Field(() => Int)
   UserId: number;
 
   @CreateDateColumn()

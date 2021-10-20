@@ -55,7 +55,7 @@ export class MarketResolver {
     };
   }
 
-  @Mutation((returns) => MarketReturn)
+  @Mutation((returns) => Boolean || String)
   async deleteMarket(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<boolean | string> {
