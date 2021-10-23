@@ -1,3 +1,4 @@
+import { MailerService } from '@nestjs-modules/mailer';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from './entity/user.entity';
@@ -23,6 +24,7 @@ describe('UserService', () => {
           provide: getRepositoryToken(User),
           useClass: MockUserRepository,
         },
+        MailerService,
       ],
     }).compile();
 

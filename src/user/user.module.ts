@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UserResolver } from './user.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,8 +11,7 @@ import { Dm } from '../dm/entity/dm.entity';
 import { Reply } from '../reply/entity/reply.entity';
 import { Meet } from '../meet/entity/meet.entity';
 import { MeetMember } from '../meet/entity/meetMember.entity';
-import { AuthService } from '../auth/auth.service';
-import { MailerService } from '@nestjs-modules/mailer';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -27,8 +26,9 @@ import { MailerService } from '@nestjs-modules/mailer';
       Meet,
       MeetMember,
     ]),
+    forwardRef(() => AuthModule),
   ],
-  providers: [UserService, UserResolver, AuthService, MailerService],
-  exports: [UserService, UserResolver, MailerService],
+  providers: [UserService, UserResolver],
+  exports: [UserService, UserResolver],
 })
 export class UserModule {}

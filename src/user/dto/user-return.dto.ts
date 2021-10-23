@@ -24,3 +24,15 @@ export class UsersReturn {
   @Field((type) => [User], { nullable: true })
   data?: User[] | null;
 }
+
+@ObjectType()
+export class TokenReturn {
+  @Field((type) => Boolean)
+  success: boolean;
+
+  @Field((type) => String || Error, { nullable: true })
+  error?: string | null;
+
+  @Field((type) => String, { nullable: true })
+  data?: string | null;
+}

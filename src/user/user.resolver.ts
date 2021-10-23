@@ -2,7 +2,7 @@ import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AuthService } from '../auth/auth.service';
 import { CreateUserInput } from './dto/create-user.input';
 import { EditUserInput } from './dto/edit-user.input';
-import { UserReturn, UsersReturn } from './dto/user-return.dto';
+import { TokenReturn, UserReturn, UsersReturn } from './dto/user-return.dto';
 import { User } from './entity/user.entity';
 import { UserService } from './user.service';
 
@@ -102,13 +102,16 @@ export class UserResolver {
     };
   }
 
-  @Mutation((returns) => String)
+  @Mutation((returns) => TokenReturn)
   async login(
     @Args('email', { type: () => String }) email: string,
     @Args('password', { type: () => String }) password: string,
-  ): Promise<string> {
+  ): Promise<TokenReturn> {
     const res = await this.authService.validateUser(email, password);
-    console.log(res);
-    return res;
+    return {
+      success: typeof res === 'string' ? true : false,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? res : null,
+    };
   }
 }

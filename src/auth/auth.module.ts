@@ -11,7 +11,7 @@ import { LocalStrategy } from './local.strategy';
     TypeOrmModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: 'bearer' }),
     JwtModule.register({
-      secretOrPrivateKey: process.env.JWT_SECRET,
+      secretOrPrivateKey: process.env.JWT_SECRET || '',
       // signOptions: {
       //   expiresIn: '2h',
       // },
