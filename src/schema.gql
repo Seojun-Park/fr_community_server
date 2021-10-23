@@ -169,6 +169,8 @@ type User {
   firstName: String!
   lastName: String!
   email: String!
+  verified: Boolean!
+  verifiedCode: String
   password: String!
   nickname: String!
   createdAt: String!
@@ -289,6 +291,7 @@ type MeetsReturn {
 
 type Query {
   getUser(id: Int!): UserReturn!
+  getUserByEmail(email: String!): UserReturn!
   getUsers: UsersReturn!
   getBoard(id: Int!): BoardReturn!
   getBoards: BoardsReturn!
@@ -307,6 +310,7 @@ type Query {
 type Mutation {
   createUser(args: CreateUserInput!): UserReturn!
   editUser(args: EditUserInput!): UserReturn!
+  verifyEmail(code: String!, email: String!): UserReturn!
   changePassword(newPassword: String!, password: String!, id: Int!): UserReturn!
   createBoard(args: CreateBoardInput!): BoardReturn!
   editBoard(args: EditBoardInput!): BoardReturn!

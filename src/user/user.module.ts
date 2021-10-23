@@ -11,6 +11,8 @@ import { Dm } from '../dm/entity/dm.entity';
 import { Reply } from '../reply/entity/reply.entity';
 import { Meet } from '../meet/entity/meet.entity';
 import { MeetMember } from '../meet/entity/meetMember.entity';
+import { AuthService } from '../auth/auth.service';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Module({
   imports: [
@@ -26,7 +28,7 @@ import { MeetMember } from '../meet/entity/meetMember.entity';
       MeetMember,
     ]),
   ],
-  providers: [UserService, UserResolver],
-  exports: [UserService, UserResolver],
+  providers: [UserService, UserResolver, AuthService, MailerService],
+  exports: [UserService, UserResolver, MailerService],
 })
 export class UserModule {}

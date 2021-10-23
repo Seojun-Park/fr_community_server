@@ -1,4 +1,5 @@
 import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { AuthService } from '../auth/auth.service';
 import { CreateUserInput } from './dto/create-user.input';
 import { EditUserInput } from './dto/edit-user.input';
 import { UserReturn, UsersReturn } from './dto/user-return.dto';
@@ -7,13 +8,28 @@ import { UserService } from './user.service';
 
 @Resolver((of) => User)
 export class UserResolver {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private authService: AuthService,
+  ) {}
 
   @Query((returns) => UserReturn)
   async getUser(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<UserReturn> {
     const res = await this.userService.getUser(id);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
+
+  @Query((returns) => UserReturn)
+  async getUserByEmail(
+    @Args('email', { type: () => String }) email: string,
+  ): Promise<UserReturn> {
+    const res = await this.userService.getUserByEmail(email);
     return {
       success: typeof res === 'string' ? false : true,
       error: typeof res === 'string' ? res : null,
@@ -56,6 +72,19 @@ export class UserResolver {
   }
 
   @Mutation((returns) => UserReturn)
+  async verifyEmail(
+    @Args('email', { type: () => String }) email: string,
+    @Args('code', { type: () => String }) code: string,
+  ): Promise<UserReturn> {
+    const res = await this.userService.verifyEmail(email, code);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
+
+  @Mutation((returns) => UserReturn)
   async changePassword(
     @Args('id', { type: () => Int }) id: number,
     @Args('password') password: string,
@@ -71,5 +100,15 @@ export class UserResolver {
       error: typeof res === 'string' ? res : null,
       data: typeof res === 'string' ? null : res,
     };
+  }
+
+  @Mutation((returns) => String)
+  async login(
+    @Args('email', { type: () => String }) email: string,
+    @Args('password', { type: () => String }) password: string,
+  ): Promise<string> {
+    const res = await this.authService.validateUser(email, password);
+    console.log(res);
+    return res;
   }
 }

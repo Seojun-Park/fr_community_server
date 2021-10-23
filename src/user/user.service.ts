@@ -5,11 +5,14 @@ import { CreateUserInput } from './dto/create-user.input';
 import { EditUserInput } from './dto/edit-user.input';
 import { User } from './entity/user.entity';
 import bcrypt from 'bcrypt';
+import { MailerService } from '@nestjs-modules/mailer';
+import { generateCode } from '../common/generate-code';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    private readonly mailerService: MailerService,
   ) {}
 
   async getUser(id: number): Promise<string | User> {
@@ -18,6 +21,18 @@ export class UserService {
         where: { id },
       });
       if (!user) return 'user not found';
+      return user;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  async getUserByEmail(email: string): Promise<string | User> {
+    try {
+      const user: User | undefined = await this.userRepository.findOne({
+        where: { email },
+      });
+      if (!user) return 'not User found';
       return user;
     } catch (err) {
       return err.message;
@@ -45,15 +60,23 @@ export class UserService {
         return 'this email is already taken ';
       }
       const hashedPassword = await bcrypt.hash(password, 10);
+      const verifiedCode = await generateCode();
       const newUser = await this.userRepository.create({
         email,
         firstName,
         lastName,
         nickname,
         password: hashedPassword,
+        verifiedCode,
       });
       const savedUser = await this.userRepository.save(newUser);
       if (!newUser) return `Can't create an user`;
+      await this.mailerService.sendMail({
+        to: email,
+        from: 'contact@test.com',
+        subject: 'Testing sed email',
+        html: `<b>welcome ${verifiedCode}</b>`,
+      });
       return savedUser;
     } catch (err) {
       return err.message;
@@ -81,6 +104,22 @@ export class UserService {
       user.nickname = nickname || prevValue.nickname;
       const savedUser = await this.userRepository.save(user);
       return savedUser;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  async verifyEmail(email: string, code: string): Promise<string | User> {
+    try {
+      const user = await this.userRepository.findOne({ where: { email } });
+      if (!user) return 'no User found';
+      if (user.verifiedCode === code) {
+        user.verifiedCode = null;
+        user.verified = true;
+        return await this.userRepository.save(user);
+      } else {
+        return 'Code is not correct, check your email';
+      }
     } catch (err) {
       return err.message;
     }

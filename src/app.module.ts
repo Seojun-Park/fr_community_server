@@ -25,8 +25,12 @@ import { Rent } from './rent/entity/rent.entity';
 import { Chat } from './chat/entity/chat.entity';
 import { RecruitModule } from './recruit/recruit.module';
 import { Recruit } from './recruit/entity/recruit.entity';
-import { MeetModule } from './meet/meet.module';
 import { Meet } from './meet/entity/meet.entity';
+import { AuthModule } from './auth/auth.module';
+import { MeetModule } from './meet/meet.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { UserService } from './user/user.service';
+import { AuthService } from './auth/auth.service';
 
 AdminJS.registerAdapter({ Database, Resource });
 @Module({
@@ -43,12 +47,24 @@ AdminJS.registerAdapter({ Database, Resource });
           // },
         },
       },
-      // context: ({ connection }) => {
-      //   console.log(connection);
-      // },
+      context: async ({ req }) => {
+        const token = req.headers.authorization || '';
+        console.log(token);
+      },
       cors: {
         origin: process.env.COR_ORIGIN_DEV,
         credentials: true,
+      },
+    }),
+    MailerModule.forRoot({
+      transport: {
+        service: 'gmail',
+        host: 'smtp.gmail.com',
+        secure: false,
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
       },
     }),
     TypeOrmModule.forRoot(ormconfig),
@@ -74,6 +90,7 @@ AdminJS.registerAdapter({ Database, Resource });
         cookiePassword: process.env.ADMIN_PASS,
       },
     } as any),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
