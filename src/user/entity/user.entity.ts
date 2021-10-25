@@ -81,43 +81,43 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Board, (board) => board.Writer, { nullable: true })
   @Field((type) => [Board], { nullable: true })
-  Board?: Board[];
+  Board?: Board[] | null;
 
   @OneToMany(() => Market, (market) => market.User, { nullable: true })
   @Field((type) => [Market], { nullable: true })
-  Market?: Market[];
+  Market?: Market[] | null;
 
   @OneToMany(() => Rent, (rent) => rent.User, { nullable: true })
   @Field((type) => [Rent], { nullable: true })
-  Rent?: Rent[];
+  Rent?: Rent[] | null;
 
   @OneToMany(() => Dm, (dm) => dm.Sender, { nullable: true })
   @Field(() => [Dm], { nullable: true })
-  AsSender: Dm[];
+  AsSender: Dm[] | null;
 
   @OneToMany(() => Dm, (dm) => dm.Receiver, { nullable: true })
   @Field(() => [Dm], { nullable: true })
-  AsReceiver: Dm[];
+  AsReceiver: Dm[] | null;
 
   @OneToMany(() => Reply, (reply) => reply.User, { nullable: true })
   @Field(() => [Reply], { nullable: true })
-  Replies: Reply[];
+  Replies: Reply[] | null;
 
   @OneToMany(() => Recruit, (recruit) => recruit.Owner, { nullable: true })
   @Field(() => [Recruit], { nullable: true })
-  Recruits: Recruit[];
+  Recruits: Recruit[] | null;
 
   @OneToMany(() => Meet, (meet) => meet.Owner, { nullable: true })
   @Field(() => [Meet], { nullable: true })
-  Meets: Meet[];
+  Meets: Meet[] | null;
 
   @OneToMany(() => MeetMember, (meetMember) => meetMember.User, {
     nullable: true,
   })
   @Field(() => [MeetMember], { nullable: true })
-  MeetMember: MeetMember[];
+  MeetMember: MeetMember[] | null;
 
-  @ManyToMany(() => Chat, (chat) => chat.Members)
+  @ManyToMany(() => Chat, (chat) => chat.Members, { nullable: true })
   @JoinTable({
     name: 'chatmembers',
     joinColumn: {
@@ -129,6 +129,6 @@ export class User extends BaseEntity {
       referencedColumnName: 'id',
     },
   })
-  @Field(() => [Chat])
-  Chats: Chat[];
+  @Field(() => [Chat], { nullable: true })
+  Chats: Chat[] | null;
 }

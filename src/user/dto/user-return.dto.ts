@@ -34,5 +34,5 @@ export class TokenReturn {
   error?: string | null;
 
   @Field((type) => String, { nullable: true })
-  data?: string | null;
+  token?: string | null;
 }

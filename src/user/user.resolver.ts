@@ -109,9 +109,10 @@ export class UserResolver {
   ): Promise<TokenReturn> {
     const res = await this.authService.validateUser(email, password);
     return {
-      success: typeof res === 'string' ? true : false,
-      error: typeof res === 'string' ? res : null,
-      data: typeof res === 'string' ? res : null,
+      success:
+        typeof res === 'string' && res !== 'no User found' ? true : false,
+      error: typeof res === 'string' ? res : 'Wrong password',
+      token: typeof res === 'string' ? res : null,
     };
   }
 }

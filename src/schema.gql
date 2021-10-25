@@ -203,7 +203,7 @@ type User {
   Recruits: [Recruit!]
   Meets: [Meet!]
   MeetMember: [MeetMember!]
-  Chats: [Chat!]!
+  Chats: [Chat!]
 }
 
 type UserReturn {
@@ -221,7 +221,7 @@ type UsersReturn {
 type TokenReturn {
   success: Boolean!
   error: String
-  data: String
+  token: String
 }
 
 type BoardReturn {
