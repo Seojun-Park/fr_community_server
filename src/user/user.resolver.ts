@@ -115,4 +115,16 @@ export class UserResolver {
       token: typeof res === 'string' ? res : null,
     };
   }
+
+  @Query((returns) => UserReturn)
+  async getMe(
+    @Args('token', { type: () => String }) token: string,
+  ): Promise<UserReturn> {
+    const res = await this.userService.getMe(token);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
 }

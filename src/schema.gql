@@ -317,6 +317,7 @@ type Query {
   getUser(id: Int!): UserReturn!
   getUserByEmail(email: String!): UserReturn!
   getUsers: UsersReturn!
+  getMe(token: String!): UserReturn!
   getBoard(id: Int!): BoardReturn!
   getBoards: BoardsReturn!
   getMarket(id: Int!): MarketReturn!

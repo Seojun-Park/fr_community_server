@@ -7,12 +7,14 @@ import { User } from './entity/user.entity';
 import bcrypt from 'bcrypt';
 import { MailerService } from '@nestjs-modules/mailer';
 import { generateCode } from '../common/generate-code';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private readonly mailerService: MailerService,
+    private readonly jwtService: JwtService,
   ) {}
 
   async getUser(id: number): Promise<string | User> {
@@ -141,6 +143,28 @@ export class UserService {
       user.password = hashedPassword;
       const savedUser = await this.userRepository.save(user);
       return savedUser;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  async getMe(token: string): Promise<string | User> {
+    try {
+      const decoded: any = await this.jwtService.verify(
+        token.includes(' ') ? token.split(' ')[1] : token,
+        { secret: process.env.JWT_SECRET || '' },
+      );
+      if (decoded && decoded.id) {
+        const user: User = await this.userRepository.findOne({
+          where: { id: decoded.id },
+        });
+        if (user) {
+          return user;
+        } else {
+          return null;
+        }
+      }
+      return undefined;
     } catch (err) {
       return err.message;
     }
