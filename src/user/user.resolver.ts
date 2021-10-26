@@ -127,4 +127,34 @@ export class UserResolver {
       data: typeof res === 'string' ? null : res,
     };
   }
+
+  @Mutation((returns) => UserReturn)
+  async sendNewCode(
+    @Args('email', { type: () => String }) email: string,
+  ): Promise<UserReturn> {
+    const res = await this.userService.sendNewCode(email);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
+
+  @Mutation((returns) => UserReturn)
+  async sendNewPassword(
+    @Args('email', { type: () => String }) email: string,
+    @Args('firstName', { type: () => String }) firstName: string,
+    @Args('lastName', { type: () => String }) lastName: string,
+  ): Promise<UserReturn> {
+    const res = await this.userService.sendNewPassword(
+      email,
+      firstName,
+      lastName,
+    );
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
 }

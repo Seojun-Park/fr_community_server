@@ -8,6 +8,7 @@ import bcrypt from 'bcrypt';
 import { MailerService } from '@nestjs-modules/mailer';
 import { generateCode } from '../common/generate-code';
 import { JwtService } from '@nestjs/jwt';
+import { generateWord } from '../common/generate-word';
 
 @Injectable()
 export class UserService {
@@ -85,6 +86,28 @@ export class UserService {
     }
   }
 
+  async sendNewCode(email: string): Promise<string | User> {
+    try {
+      const existedUser = await this.userRepository.findOne({
+        where: { email },
+      });
+      if (!existedUser) {
+        return 'no User found';
+      }
+      const verifiedCode = await generateCode();
+      existedUser.verifiedCode = verifiedCode;
+      await this.mailerService.sendMail({
+        to: email,
+        from: 'contact@test.com',
+        subject: 'Testing send email',
+        html: `<b>welcome ${verifiedCode}</b>`,
+      });
+      return await this.userRepository.save(existedUser);
+    } catch (err) {
+      return err.message;
+    }
+  }
+
   async editUser(args: EditUserInput): Promise<string | User> {
     try {
       const { id, firstName, lastName, nickname } = args;
@@ -143,6 +166,37 @@ export class UserService {
       user.password = hashedPassword;
       const savedUser = await this.userRepository.save(user);
       return savedUser;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  async sendNewPassword(
+    email: string,
+    firstName: string,
+    lastName: string,
+  ): Promise<string | User> {
+    try {
+      const user: User | undefined = await this.userRepository.findOne({
+        where: {
+          email,
+        },
+      });
+      if (!user) return '해당 이메일의 유저를 찾을 수 없습니다';
+      if (user.firstName !== firstName)
+        return '이름이 틀립니다 다시 한번 확인 해 주세요';
+      if (user.lastName !== lastName)
+        return '성이 틀립니다 다시 한번 확인해 주세요';
+      const newPassword: string = await generateWord();
+      await this.mailerService.sendMail({
+        to: email,
+        from: 'contact@test.com',
+        subject: '변경된 비밀번호 입니다',
+        html: `<b>새로운 비밀번호는 ${newPassword} 입니다</b>`,
+      });
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedPassword;
+      return await this.userRepository.save(user);
     } catch (err) {
       return err.message;
     }
