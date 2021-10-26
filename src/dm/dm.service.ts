@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PubSubEngine } from 'graphql-subscriptions';
+import { PubSubEngine, withFilter } from 'graphql-subscriptions';
 import { Repository } from 'typeorm';
 import { Chat } from '../chat/entity/chat.entity';
 import { User } from '../user/entity/user.entity';
@@ -15,6 +15,20 @@ export class DmService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @Inject('PUB_SUB') private pubSub: PubSubEngine,
   ) {}
+
+  async dmSubscription(chatId: number): Promise<any> {
+    try {
+      const chat = await this.chatRepository.findOne({
+        where: {
+          id: chatId,
+        },
+      });
+      if (!chat) return 'no Chat found';
+      return await this.pubSub.asyncIterator('dmSubscription');
+    } catch (err) {
+      return err.message;
+    }
+  }
 
   async sendDm(args: CreateDmInput): Promise<Dm | string> {
     try {

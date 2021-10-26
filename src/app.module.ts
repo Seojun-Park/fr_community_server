@@ -29,8 +29,6 @@ import { Meet } from './meet/entity/meet.entity';
 import { AuthModule } from './auth/auth.module';
 import { MeetModule } from './meet/meet.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { UserService } from './user/user.service';
-import { AuthService } from './auth/auth.service';
 
 AdminJS.registerAdapter({ Database, Resource });
 @Module({
