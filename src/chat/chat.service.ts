@@ -31,7 +31,7 @@ export class ChatService {
     try {
       const user = await this.userRepository.findOne({
         where: { id: userId },
-        relations: ['Members', 'messages'],
+        relations: ['Chats', 'Chats.messages'],
       });
       const chats = user.Chats;
       return chats;

@@ -36,6 +36,6 @@ export class Chat extends BaseEntity {
   Members: User[];
 
   @OneToMany(() => Dm, (dm) => dm.Chat, { nullable: true })
-  @Field(() => [Dm])
-  messages: Dm[];
+  @Field(() => [Dm], { nullable: true })
+  messages: Dm[] | null;
 }

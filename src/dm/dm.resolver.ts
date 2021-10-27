@@ -16,38 +16,39 @@ export class DmResolver {
   //   return res;
   // }
 
-  // @Subscription((returns) => Dm)
-  // dmSubscription() {
-  //   return pubSub.asyncIterator('dmSubscription');
-  // }
-
-  @Subscription((returns) => Dm, {
-    name: 'dmSubscription',
-    filter: (payload, variables) => {
-      return payload.dmSubscription.chatId === variables.chatId;
-    },
-  })
-  dmSubscription(@Args('chatId', { type: () => Int }) chatId: number) {
-    // return pubSub.asyncIterator('dmSubscription');
-    return withFilter(
-      () => pubSub.asyncIterator('dmSubscription'),
-      async ({ dmSubscription }, { chatId }) => {
-        if (dmSubscription.chatId === chatId) {
-          return true;
-        } else {
-          return false;
-        }
-      },
-    )(chatId);
+  @Subscription((returns) => Dm)
+  dmSubscription() {
+    return pubSub.asyncIterator('dmSubscription');
   }
+
+  // @Subscription((returns) => Dm, {
+  //   name: 'dmSubscription',
+  //   filter: (payload, variables) => {
+  //     return payload.dmSubscription.chatId === variables.chatId;
+  //   },
+  // })
+  // dmSubscription(@Args('chatId', { type: () => Int }) chatId: number) {
+  //   // return pubSub.asyncIterator('dmSubscription');
+  //   return withFilter(
+  //     () => pubSub.asyncIterator('dmSubscription'),
+  //     async ({ dmSubscription }, { chatId }) => {
+  //       if (dmSubscription.chatId === chatId) {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //     },
+  //   )(chatId);
+  // }
 
   @Mutation((returns) => DmReturn)
   async sendDm(
     @Args('args', { type: () => CreateDmInput }) args: CreateDmInput,
   ): Promise<DmReturn> {
     const res = await this.dmService.sendDm(args);
-    if (typeof res !== 'string')
+    if (typeof res !== 'string') {
       pubSub.publish('dmSubscription', { dmSubscription: { ...res } });
+    }
     return {
       success: typeof res === 'string' ? false : true,
       error: typeof res === 'string' ? res : null,

@@ -131,7 +131,7 @@ type Chat {
   updatedAt: String!
   deletedAt: String
   Members: [User!]!
-  messages: [Dm!]!
+  messages: [Dm!]
 }
 
 type MeetMember {
@@ -526,5 +526,5 @@ input EditMeetInput {
 }
 
 type Subscription {
-  dmSubscription(chatId: Int!): Dm!
+  dmSubscription: Dm!
 }
