@@ -272,6 +272,12 @@ type DmReturn {
   data: Dm
 }
 
+type DmsReturn {
+  success: Boolean!
+  error: String
+  data: [Dm!]
+}
+
 type ChatReturn {
   success: Boolean!
   error: String
@@ -325,6 +331,7 @@ type Query {
   getMarkets: MarketsReturn!
   getRent(id: Int!): RentReturn!
   getRents: RentsReturn!
+  getChatMessages(ChatId: Int!): DmsReturn!
   getChat(chatId: Int!): ChatReturn!
   getChats(userId: Int!): ChatsReturn!
   getRecruit(id: Int!): RecruitReturn!
