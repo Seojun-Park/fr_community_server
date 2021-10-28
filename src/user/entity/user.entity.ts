@@ -67,6 +67,10 @@ export class User extends BaseEntity {
   @Field()
   nickname: string;
 
+  @Column({ nullable: true })
+  @Field({ nullable: true })
+  avatar: string | null;
+
   @CreateDateColumn()
   @Field()
   createdAt: string;

@@ -18,7 +18,12 @@ export class ChatService {
     try {
       const chat = await this.chatRepository.findOne({
         where: { id: chatId },
-        relations: ['Members', 'messages'],
+        relations: [
+          'Members',
+          'messages',
+          'messages.Sender',
+          'messages.Receiver',
+        ],
       });
       if (!chat) return `no chat found for the id #${chatId}`;
       return chat;

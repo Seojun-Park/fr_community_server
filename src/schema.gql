@@ -191,6 +191,7 @@ type User {
   verifiedCode: String
   password: String!
   nickname: String!
+  avatar: String
   createdAt: String!
   updatedAt: String!
   deletedAt: String
