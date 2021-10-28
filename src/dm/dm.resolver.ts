@@ -17,10 +17,19 @@ const pubSub = new PubSub();
 export class DmResolver {
   constructor(private dmService: DmService) {}
 
-  @Subscription((returns) => Dm)
-  dmSubscription() {
+  @Subscription((returns) => Dm, {
+    filter: (payload, variables) => {
+      return payload.dmSubscription.ChatId === variables.ChatId;
+    },
+  })
+  dmSubscription(@Args('ChatId', { type: () => Int }) ChatId: number) {
     return pubSub.asyncIterator('dmSubscription');
   }
+
+  // @Subscription((returns) => Dm)
+  // dmSubscription() {
+  //   return pubSub.asyncIterator('dmSubscription');
+  // }
 
   @Mutation((returns) => DmReturn)
   async sendDm(
@@ -40,8 +49,9 @@ export class DmResolver {
   @Query((returns) => DmsReturn)
   async getChatMessages(
     @Args('ChatId', { type: () => Int }) ChatId: number,
+    @Args('load', { type: () => Int }) load: number,
   ): Promise<DmsReturn> {
-    const res = await this.dmService.getChatMessages(ChatId);
+    const res = await this.dmService.getChatMessages(ChatId, load);
     return {
       success: typeof res === 'string' ? false : true,
       error: typeof res === 'string' ? res : null,

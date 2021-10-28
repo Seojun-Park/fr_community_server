@@ -331,7 +331,7 @@ type Query {
   getMarkets: MarketsReturn!
   getRent(id: Int!): RentReturn!
   getRents: RentsReturn!
-  getChatMessages(ChatId: Int!): DmsReturn!
+  getChatMessages(load: Int!, ChatId: Int!): DmsReturn!
   getChat(chatId: Int!): ChatReturn!
   getChats(userId: Int!): ChatsReturn!
   getRecruit(id: Int!): RecruitReturn!
@@ -534,5 +534,5 @@ input EditMeetInput {
 }
 
 type Subscription {
-  dmSubscription: Dm!
+  dmSubscription(ChatId: Int!): Dm!
 }

@@ -63,16 +63,20 @@ export class DmService {
     }
   }
 
-  async getChatMessages(ChatId: number): Promise<Dm[] | string> {
+  async getChatMessages(ChatId: number, load: number): Promise<Dm[] | string> {
     try {
       const msgs = await this.dmRepository.find({
         where: { ChatId },
         relations: ['Sender', 'Receiver'],
+        take: load * 10 + 1,
+        order: {
+          createdAt: 'DESC',
+        },
       });
       if (!msgs) {
         return 'no Messages found';
       }
-      return msgs;
+      return msgs.reverse();
     } catch (err) {
       return err.message;
     }
