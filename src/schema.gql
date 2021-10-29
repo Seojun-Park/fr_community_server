@@ -132,6 +132,8 @@ type Chat {
   deletedAt: String
   Members: [User!]!
   messages: [Dm!]
+  Member1: Int!
+  Member2: Int!
 }
 
 type MeetMember {
@@ -365,7 +367,7 @@ type Mutation {
   deleteRent(id: Int!): RentReturn!
   sendDm(args: CreateDmInput!): DmReturn!
   createChat(args: CreateChatInput!): ChatReturn!
-  outChat(userID: Int!, chatId: Int!): ChatReturn!
+  outChat(userId: Int!, chatId: Int!): ChatReturn!
   createReply(args: CreateReplyInput!): ReplyReturn!
   editReply(args: EditReplyInput!): ReplyReturn!
   deleteReply(id: Int!): Boolean!
@@ -535,4 +537,6 @@ input EditMeetInput {
 
 type Subscription {
   dmSubscription(ChatId: Int!): Dm!
+  memberOut(chatId: Int!): Int!
+  getDm: Int!
 }

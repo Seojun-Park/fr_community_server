@@ -26,11 +26,6 @@ export class DmResolver {
     return pubSub.asyncIterator('dmSubscription');
   }
 
-  // @Subscription((returns) => Dm)
-  // dmSubscription() {
-  //   return pubSub.asyncIterator('dmSubscription');
-  // }
-
   @Mutation((returns) => DmReturn)
   async sendDm(
     @Args('args', { type: () => CreateDmInput }) args: CreateDmInput,
@@ -38,6 +33,7 @@ export class DmResolver {
     const res = await this.dmService.sendDm(args);
     if (typeof res !== 'string') {
       pubSub.publish('dmSubscription', { dmSubscription: { ...res } });
+      pubSub.publish('getDm', { getDm: res.ChatId });
     }
     return {
       success: typeof res === 'string' ? false : true,

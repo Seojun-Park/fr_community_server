@@ -44,13 +44,23 @@ export class DmService {
       const dm = await this.dmRepository.create({
         content,
       });
+      const existedChat = await this.chatRepository.findOne({
+        where: [
+          { Member1: SenderId, Member2: ReceiverId },
+          { Member1: ReceiverId, Member2: SenderId },
+        ],
+      });
       if (ChatId) {
         dm.ChatId = ChatId;
+      } else if (existedChat) {
+        dm.ChatId = existedChat.id;
       } else {
         const newChat = new Chat();
         newChat.Members = [];
         newChat.Members.push(sender);
         newChat.Members.push(receiver);
+        newChat.Member1 = SenderId;
+        newChat.Member2 = ReceiverId;
         const savedChat = await this.chatRepository.save(newChat);
         dm.ChatId = savedChat.id;
       }

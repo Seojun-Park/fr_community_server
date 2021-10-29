@@ -1,11 +1,36 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  Int,
+  Mutation,
+  Query,
+  Resolver,
+  Subscription,
+} from '@nestjs/graphql';
+import { PubSub } from 'graphql-subscriptions';
+import { Dm } from '../dm/entity/dm.entity';
 import { ChatService } from './chat.service';
 import { ChatReturn, ChatsReturn } from './dto/chat-return.dto';
 import { CreateChatInput } from './dto/create-chat.input';
 import { Chat } from './entity/chat.entity';
+
+const pubSub = new PubSub();
 @Resolver((of) => Chat)
 export class ChatResolver {
   constructor(private chatService: ChatService) {}
+
+  @Subscription((returns) => Int, {
+    filter: (payload, variables) => {
+      return payload.memberOut.chatId === variables.chatId;
+    },
+  })
+  memberOut(@Args('chatId', { type: () => Int }) chatId: number) {
+    return pubSub.asyncIterator('memberOut');
+  }
+
+  @Subscription((returns) => Int)
+  getDm() {
+    return pubSub.asyncIterator('getDm');
+  }
 
   @Query((returns) => ChatReturn)
   async getChat(
@@ -46,7 +71,7 @@ export class ChatResolver {
   @Mutation((returns) => ChatReturn)
   async outChat(
     @Args('chatId', { type: () => Int }) chatId: number,
-    @Args('userID', { type: () => Int }) userId: number,
+    @Args('userId', { type: () => Int }) userId: number,
   ): Promise<ChatReturn> {
     const res = await this.chatService.outChat(chatId, userId);
     return {

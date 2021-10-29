@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PubSub } from 'graphql-subscriptions';
 import { Repository } from 'typeorm';
 import { Dm } from '../dm/entity/dm.entity';
 import { User } from '../user/entity/user.entity';
 import { CreateChatInput } from './dto/create-chat.input';
 import { Chat } from './entity/chat.entity';
+
+const pubSub = new PubSub();
 
 @Injectable()
 export class ChatService {
@@ -54,12 +57,22 @@ export class ChatService {
       const receiver = await this.userRepository.findOne({
         where: { id: ReceiverId },
       });
-
+      const existedChat = await this.chatRepository.findOne({
+        where: [
+          { Member1: SenderId, Member2: ReceiverId },
+          { Member1: ReceiverId, Member2: SenderId },
+        ],
+      });
+      if (existedChat) {
+        return existedChat;
+      }
       if (!sender || !receiver)
         return `no ${!sender ? 'sender' : 'receiver'} found`;
       const chat = new Chat();
       chat.Members = [];
       chat.Members.push(sender);
+      chat.Member1 = SenderId;
+      chat.Member2 = ReceiverId;
       chat.Members.push(receiver);
       const savedChat = await this.chatRepository.save(chat);
       sender.Chats.filter((elem) => elem.id === savedChat.id);
@@ -83,6 +96,9 @@ export class ChatService {
         await this.dmRepository.remove(msgs);
       }
       chat.Members = chat.Members.filter((user) => user.id !== userId);
+      pubSub.publish('memberOut', {
+        id: userId,
+      });
       if (chat.Members.length === 0) {
         chat.Members = null;
         await this.chatRepository.remove(chat);

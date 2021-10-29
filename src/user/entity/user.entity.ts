@@ -6,7 +6,6 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -122,17 +121,6 @@ export class User extends BaseEntity {
   MeetMember: MeetMember[] | null;
 
   @ManyToMany(() => Chat, (chat) => chat.Members, { nullable: true })
-  @JoinTable({
-    name: 'chatmembers',
-    joinColumn: {
-      name: 'UserId',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'ChatId',
-      referencedColumnName: 'id',
-    },
-  })
   @Field(() => [Chat], { nullable: true })
   Chats: Chat[] | null;
 }
