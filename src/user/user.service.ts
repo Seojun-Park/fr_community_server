@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, Like, ILike } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { EditUserInput } from './dto/edit-user.input';
 import { User } from './entity/user.entity';
@@ -219,6 +219,21 @@ export class UserService {
         }
       }
       return undefined;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  async searchUsers(term: string): Promise<string | User[]> {
+    try {
+      const foundUsers = await this.userRepository.find({
+        where: {
+          nickname: ILike(`%${term}%`),
+        },
+        // where: `User.nickname ILike '%${term}%`,
+      });
+      if (!foundUsers) return 'no Users with the nickname';
+      return foundUsers;
     } catch (err) {
       return err.message;
     }

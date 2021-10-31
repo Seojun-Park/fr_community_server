@@ -16,20 +16,6 @@ export class DmService {
     @Inject('PUB_SUB') private pubSub: PubSubEngine,
   ) {}
 
-  async dmSubscription(chatId: number): Promise<any> {
-    try {
-      const chat = await this.chatRepository.findOne({
-        where: {
-          id: chatId,
-        },
-      });
-      if (!chat) return 'no Chat found';
-      return await this.pubSub.asyncIterator('dmSubscription');
-    } catch (err) {
-      return err.message;
-    }
-  }
-
   async sendDm(args: CreateDmInput): Promise<Dm | string> {
     try {
       const { SenderId, ReceiverId, content, ChatId } = args;

@@ -132,8 +132,8 @@ type Chat {
   deletedAt: String
   Members: [User!]!
   messages: [Dm!]
-  Member1: Int!
-  Member2: Int!
+  Member1: Int
+  Member2: Int
 }
 
 type MeetMember {
@@ -292,6 +292,11 @@ type ChatsReturn {
   data: [Chat!]
 }
 
+type ChatOutReturn {
+  chatId: Int!
+  userId: Int!
+}
+
 type ReplyReturn {
   success: Boolean!
   error: String
@@ -327,6 +332,7 @@ type Query {
   getUserByEmail(email: String!): UserReturn!
   getUsers: UsersReturn!
   getMe(token: String!): UserReturn!
+  searchUsers(term: String!): UsersReturn!
   getBoard(id: Int!): BoardReturn!
   getBoards: BoardsReturn!
   getMarket(id: Int!): MarketReturn!
@@ -336,6 +342,7 @@ type Query {
   getChatMessages(load: Int!, ChatId: Int!): DmsReturn!
   getChat(chatId: Int!): ChatReturn!
   getChats(userId: Int!): ChatsReturn!
+  checkChatMember(chatId: Int!): ChatReturn!
   getRecruit(id: Int!): RecruitReturn!
   getRecruits: RecruitsReturn!
   getMeet(id: Int!): MeetReturn!
@@ -537,6 +544,6 @@ input EditMeetInput {
 
 type Subscription {
   dmSubscription(ChatId: Int!): Dm!
-  memberOut(chatId: Int!): Int!
-  getDm: Int!
+  memberOut(chatId: Int!): ChatOutReturn!
+  getDm(userId: Int!): Dm!
 }

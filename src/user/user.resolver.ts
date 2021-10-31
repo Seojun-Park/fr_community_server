@@ -157,4 +157,16 @@ export class UserResolver {
       data: typeof res === 'string' ? null : res,
     };
   }
+
+  @Query((returns) => UsersReturn)
+  async searchUsers(
+    @Args('term', { type: () => String }) term: string,
+  ): Promise<UsersReturn> {
+    const res = await this.userService.searchUsers(term);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
 }

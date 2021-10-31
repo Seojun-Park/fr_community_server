@@ -33,7 +33,7 @@ export class DmResolver {
     const res = await this.dmService.sendDm(args);
     if (typeof res !== 'string') {
       pubSub.publish('dmSubscription', { dmSubscription: { ...res } });
-      pubSub.publish('getDm', { getDm: res.ChatId });
+      pubSub.publish('getDm', { getDm: { ...res } });
     }
     return {
       success: typeof res === 'string' ? false : true,

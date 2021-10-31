@@ -38,11 +38,11 @@ export class Dm extends BaseEntity {
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  SenderId: number;
+  SenderId: number | null;
 
   @Column({ nullable: true })
   @Field({ nullable: true })
-  ReceiverId: number;
+  ReceiverId: number | null;
 
   @Column()
   @Field(() => Int)
@@ -55,7 +55,7 @@ export class Dm extends BaseEntity {
   })
   @JoinColumn([{ name: 'SenderId', referencedColumnName: 'id' }])
   @Field(() => User, { nullable: true })
-  Sender: User;
+  Sender: User | null;
 
   @ManyToOne((type) => User, (user) => user.AsReceiver, {
     nullable: true,
@@ -64,7 +64,7 @@ export class Dm extends BaseEntity {
   })
   @Field(() => User, { nullable: true })
   @JoinColumn([{ name: 'ReceiverId', referencedColumnName: 'id' }])
-  Receiver: User;
+  Receiver: User | null;
 
   @ManyToOne((type) => Chat, (chat) => chat.messages, {
     onDelete: 'SET NULL',

@@ -1,13 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PubSub } from 'graphql-subscriptions';
 import { Repository } from 'typeorm';
 import { Dm } from '../dm/entity/dm.entity';
 import { User } from '../user/entity/user.entity';
 import { CreateChatInput } from './dto/create-chat.input';
 import { Chat } from './entity/chat.entity';
-
-const pubSub = new PubSub();
 
 @Injectable()
 export class ChatService {
@@ -29,6 +26,18 @@ export class ChatService {
         ],
       });
       if (!chat) return `no chat found for the id #${chatId}`;
+      return chat;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
+  async checkChatMember(chatId: number): Promise<Chat | string> {
+    try {
+      const chat = await this.chatRepository.findOne({
+        where: { id: chatId },
+      });
+      if (!chat) return 'Fail to check chat member';
       return chat;
     } catch (err) {
       return err.message;
@@ -90,15 +99,22 @@ export class ChatService {
       });
       if (!chat) return 'No chat found';
       if (chat.messages) {
-        const msgs = chat.messages.filter(
-          (msg) => msg.SenderId === userId || msg.ReceiverId === userId,
+        const receivedMsgs = chat.messages.filter(
+          (msg) => msg.ReceiverId === userId,
         );
-        await this.dmRepository.remove(msgs);
+        const sentMsgs = chat.messages.filter((msg) => msg.SenderId === userId);
+        if (receivedMsgs) {
+          await this.dmRepository.remove(receivedMsgs);
+        } else {
+          await this.dmRepository.remove(sentMsgs);
+        }
       }
       chat.Members = chat.Members.filter((user) => user.id !== userId);
-      pubSub.publish('memberOut', {
-        id: userId,
-      });
+      if (chat.Member1 === userId) {
+        chat.Member1 = null;
+      } else {
+        chat.Member2 = null;
+      }
       if (chat.Members.length === 0) {
         chat.Members = null;
         await this.chatRepository.remove(chat);

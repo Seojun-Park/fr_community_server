@@ -52,11 +52,11 @@ export class Chat extends BaseEntity {
   @Field(() => [Dm], { nullable: true })
   messages: Dm[] | null;
 
-  @Column()
-  @Field(() => Int)
-  Member1: number;
+  @Column({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  Member1: number | null;
 
-  @Column()
-  @Field(() => Int)
-  Member2: number;
+  @Column({ nullable: true })
+  @Field(() => Int, { nullable: true })
+  Member2: number | null;
 }

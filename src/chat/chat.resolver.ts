@@ -9,7 +9,7 @@ import {
 import { PubSub } from 'graphql-subscriptions';
 import { Dm } from '../dm/entity/dm.entity';
 import { ChatService } from './chat.service';
-import { ChatReturn, ChatsReturn } from './dto/chat-return.dto';
+import { ChatOutReturn, ChatReturn, ChatsReturn } from './dto/chat-return.dto';
 import { CreateChatInput } from './dto/create-chat.input';
 import { Chat } from './entity/chat.entity';
 
@@ -18,8 +18,9 @@ const pubSub = new PubSub();
 export class ChatResolver {
   constructor(private chatService: ChatService) {}
 
-  @Subscription((returns) => Int, {
+  @Subscription((returns) => ChatOutReturn, {
     filter: (payload, variables) => {
+      console.log(payload, variables);
       return payload.memberOut.chatId === variables.chatId;
     },
   })
@@ -27,8 +28,15 @@ export class ChatResolver {
     return pubSub.asyncIterator('memberOut');
   }
 
-  @Subscription((returns) => Int)
-  getDm() {
+  @Subscription((returns) => Dm, {
+    filter: (payload, variables) => {
+      return (
+        payload.getDm.ReceiverId === variables.userId ||
+        payload.getDm.SenderId === variables.userId
+      );
+    },
+  })
+  getDm(@Args('userId', { type: () => Int }) userId: number) {
     return pubSub.asyncIterator('getDm');
   }
 
@@ -56,6 +64,18 @@ export class ChatResolver {
     };
   }
 
+  @Query((returns) => ChatReturn)
+  async checkChatMember(
+    @Args('chatId', { type: () => Int }) chatId: number,
+  ): Promise<ChatReturn> {
+    const res = await this.chatService.checkChatMember(chatId);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
+
   @Mutation((returns) => ChatReturn)
   async createChat(
     @Args('args', { type: () => CreateChatInput }) args: CreateChatInput,
@@ -74,6 +94,14 @@ export class ChatResolver {
     @Args('userId', { type: () => Int }) userId: number,
   ): Promise<ChatReturn> {
     const res = await this.chatService.outChat(chatId, userId);
+    if (typeof res !== 'string') {
+      pubSub.publish('memberOut', {
+        memberOut: {
+          chatId: chatId,
+          userId: userId,
+        },
+      });
+    }
     return {
       success:
         typeof res === 'string'
