@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { PubSubEngine, withFilter } from 'graphql-subscriptions';
+import { PubSubEngine } from 'graphql-subscriptions';
 import { Repository } from 'typeorm';
 import { Chat } from '../chat/entity/chat.entity';
 import { User } from '../user/entity/user.entity';
