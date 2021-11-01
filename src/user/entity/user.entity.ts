@@ -8,12 +8,14 @@ import {
   Entity,
   ManyToMany,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Board } from '../../board/entity/board.entity';
 import { Chat } from '../../chat/entity/chat.entity';
 import { Dm } from '../../dm/entity/dm.entity';
+import { Like } from '../../like/entity/like.entity';
 import { Market } from '../../market/entity/market.entity';
 import { Meet } from '../../meet/entity/meet.entity';
 import { MeetMember } from '../../meet/entity/meetMember.entity';
@@ -45,6 +47,10 @@ export class User extends BaseEntity {
   @Column()
   @Field()
   email: string;
+
+  @Column({ name: 'LikeId' })
+  @Field((type) => Int)
+  LikeId: number;
 
   @Column({ type: 'boolean', default: false })
   @Field((type) => Boolean)
@@ -123,4 +129,8 @@ export class User extends BaseEntity {
   @ManyToMany(() => Chat, (chat) => chat.Members, { nullable: true })
   @Field(() => [Chat], { nullable: true })
   Chats: Chat[] | null;
+
+  @OneToOne(() => Like, (like) => like.Owner)
+  @Field(() => Like)
+  Like: Like;
 }

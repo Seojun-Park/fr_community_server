@@ -13,6 +13,7 @@ import { Meet } from '../meet/entity/meet.entity';
 import { MeetMember } from '../meet/entity/meetMember.entity';
 import { AuthModule } from '../auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { Like } from '../like/entity/like.entity';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { JwtModule } from '@nestjs/jwt';
       Reply,
       Meet,
       MeetMember,
+      Like,
     ]),
     forwardRef(() => AuthModule),
     JwtModule.register({

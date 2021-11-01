@@ -2,33 +2,54 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Market {
+type MeetMember {
+  MeetId: Int!
+  UserId: Int!
+  loggedInAt: String
+  Meet: Meet!
+  User: User!
+}
+
+type Meet {
   id: Int!
   title: String!
   content: String!
-  UserId: Int!
 
   """
-  euro currency
+  category type class / meetup
   """
-  price: String!
-  location: String!
-
-  """
-  deal type buy / sell
-  """
-  type: String!
-
-  """
-  deal status sold / onSale
-  """
-  status: String!
-  thumbnail: String
+  category: String!
+  price: String
+  period: String
+  location: String
+  maximum: String
+  OwnerId: Int!
   createdAt: String!
   updatedAt: String!
   deletedAt: String
-  User: User!
-  Images: [Image!]
+  Owner: User!
+  MeetMember: [MeetMember!]
+  Likes: [Like!]
+}
+
+type Recruit {
+  id: Int!
+  title: String!
+  content: String!
+  period: String!
+  location: String!
+  salary: String!
+
+  """
+  recruting type hiring / searching / done
+  """
+  type: String!
+  OwnerId: Int!
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  Owner: User!
+  Likes: [Like!]
 }
 
 type Rent {
@@ -71,6 +92,51 @@ type Rent {
   deletedAt: String
   Images: [Image!]!
   User: User!
+  Likes: Like
+}
+
+type Like {
+  id: Int!
+  OwnerId: Int!
+  Boards: [Board!]
+  Markets: [Market!]
+  Meets: [Meet!]
+  Recruits: [Recruit!]
+  Rents: [Rent!]
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  Owner: User!
+}
+
+type Market {
+  id: Int!
+  title: String!
+  content: String!
+  UserId: Int!
+
+  """
+  euro currency
+  """
+  price: String!
+  location: String!
+
+  """
+  deal type buy / sell
+  """
+  type: String!
+
+  """
+  deal status sold / onSale
+  """
+  status: String!
+  thumbnail: String
+  createdAt: String!
+  updatedAt: String!
+  deletedAt: String
+  User: User!
+  Images: [Image!]
+  Likes: [Like!]
 }
 
 type Image {
@@ -109,6 +175,7 @@ type Board {
   Writer: User!
   Replies: [Reply!]
   Images: [Image!]
+  Likes: [Like!]
 }
 
 type Dm {
@@ -136,54 +203,6 @@ type Chat {
   Member2: Int
 }
 
-type MeetMember {
-  MeetId: Int!
-  UserId: Int!
-  loggedInAt: String
-  Meet: Meet!
-  User: User!
-}
-
-type Meet {
-  id: Int!
-  title: String!
-  content: String!
-
-  """
-  category type class / meetup
-  """
-  category: String!
-  price: String
-  period: String
-  location: String
-  maximum: String
-  OwnerId: Int!
-  createdAt: String!
-  updatedAt: String!
-  deletedAt: String
-  Owner: User!
-  MeetMember: [MeetMember!]
-}
-
-type Recruit {
-  id: Int!
-  title: String!
-  content: String!
-  period: String!
-  location: String!
-  salary: String!
-
-  """
-  recruting type hiring / searching / done
-  """
-  type: String!
-  OwnerId: Int!
-  createdAt: String!
-  updatedAt: String!
-  deletedAt: String
-  Owner: User!
-}
-
 type User {
   id: Int!
   firstName: String!
@@ -207,6 +226,7 @@ type User {
   Meets: [Meet!]
   MeetMember: [MeetMember!]
   Chats: [Chat!]
+  Like: Like!
 }
 
 type UserReturn {
@@ -327,6 +347,12 @@ type MeetsReturn {
   data: [Meet!]
 }
 
+type LikeReturn {
+  success: Boolean!
+  error: String
+  data: Like
+}
+
 type Query {
   getUser(id: Int!): UserReturn!
   getUserByEmail(email: String!): UserReturn!
@@ -347,6 +373,7 @@ type Query {
   getRecruits: RecruitsReturn!
   getMeet(id: Int!): MeetReturn!
   getMeets: MeetsReturn!
+  getLike(UserId: Int!): LikeReturn!
 }
 
 type Mutation {
@@ -387,6 +414,7 @@ type Mutation {
   joinMeet(UserId: Int!, MeetId: Int!): Boolean!
   exitMeet(UserId: Int!, MeetId: Int!): Boolean!
   kickUserFromMeet(OwnerId: Int!, TargetId: Int!, MeetId: Int!): Boolean!
+  toggleLike(UserId: Int!, type: String!, Id: Int!): LikeReturn!
 }
 
 input CreateUserInput {

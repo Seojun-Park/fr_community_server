@@ -1,6 +1,8 @@
 import { MailerService } from '@nestjs-modules/mailer';
+import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Like } from '../like/entity/like.entity';
 import { User } from './entity/user.entity';
 import { UserService } from './user.service';
 
@@ -12,6 +14,8 @@ class MockUserRepository {
     return null;
   }
 }
+
+class MockLikeRepository {}
 
 describe('UserService', () => {
   let service: UserService;
@@ -25,6 +29,11 @@ describe('UserService', () => {
           useClass: MockUserRepository,
         },
         MailerService,
+        {
+          provide: getRepositoryToken(Like),
+          useClass: MockLikeRepository,
+        },
+        JwtService,
       ],
     }).compile();
 

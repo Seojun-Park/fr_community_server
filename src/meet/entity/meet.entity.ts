@@ -6,11 +6,13 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Like } from '../../like/entity/like.entity';
 import { User } from '../../user/entity/user.entity';
 import { MeetMember } from './meetMember.entity';
 
@@ -85,4 +87,8 @@ export class Meet extends BaseEntity {
   })
   @Field(() => [MeetMember], { nullable: true })
   MeetMember?: MeetMember[];
+
+  @ManyToMany(() => Like, (like) => like.Meets, { nullable: true })
+  @Field(() => [Like], { nullable: true })
+  Likes: Like[] | null;
 }

@@ -29,6 +29,7 @@ import { Meet } from './meet/entity/meet.entity';
 import { AuthModule } from './auth/auth.module';
 import { MeetModule } from './meet/meet.module';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { LikeModule } from './like/like.module';
 
 AdminJS.registerAdapter({ Database, Resource });
 @Module({
@@ -89,6 +90,7 @@ AdminJS.registerAdapter({ Database, Resource });
       },
     } as any),
     AuthModule,
+    LikeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

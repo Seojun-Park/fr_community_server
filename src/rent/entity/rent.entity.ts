@@ -6,12 +6,14 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Image } from '../../image/entity/image.entity';
+import { Like } from '../../like/entity/like.entity';
 import { User } from '../../user/entity/user.entity';
 
 @Entity()
@@ -65,7 +67,6 @@ export class Rent extends BaseEntity {
     enum: ['central', 'individual'],
     default: 'central',
   })
-  // @Column()
   @Field({ description: 'heat type such as central / individual' })
   heatType: string;
 
@@ -137,4 +138,8 @@ export class Rent extends BaseEntity {
   @JoinColumn([{ name: 'UserId', referencedColumnName: 'id' }])
   @Field(() => User)
   User: User;
+
+  @ManyToMany(() => Like, (like) => like.Rents, { nullable: true })
+  @Field(() => Like, { nullable: true })
+  Likes: Like[] | null;
 }

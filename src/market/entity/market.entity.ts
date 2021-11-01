@@ -6,12 +6,14 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Image } from '../../image/entity/image.entity';
+import { Like } from '../../like/entity/like.entity';
 import { User } from '../../user/entity/user.entity';
 
 @Entity()
@@ -57,9 +59,9 @@ export class Market extends BaseEntity {
   @Field({ description: 'deal status sold / onSale' })
   status: string;
 
-  @Column()
+  @Column({ nullable: true })
   @Field({ nullable: true })
-  thumbnail?: string;
+  thumbnail?: string | null;
 
   @CreateDateColumn()
   @Field()
@@ -83,5 +85,9 @@ export class Market extends BaseEntity {
 
   @OneToMany(() => Image, (image) => image.Market, { nullable: true })
   @Field(() => [Image], { nullable: true })
-  Images?: Image[];
+  Images?: Image[] | null;
+
+  @ManyToMany(() => Like, (like) => like.Markets, { nullable: true })
+  @Field(() => [Like], { nullable: true })
+  Likes?: Like[] | null;
 }

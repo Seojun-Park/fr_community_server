@@ -9,11 +9,14 @@ import { MailerService } from '@nestjs-modules/mailer';
 import { generateCode } from '../common/generate-code';
 import { JwtService } from '@nestjs/jwt';
 import { generateWord } from '../common/generate-word';
+import { Like as LikeEntity } from '../like/entity/like.entity';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @InjectRepository(LikeEntity)
+    private readonly likeRepository: Repository<LikeEntity>,
     private readonly mailerService: MailerService,
     private readonly jwtService: JwtService,
   ) {}
@@ -72,8 +75,11 @@ export class UserService {
         password: hashedPassword,
         verifiedCode,
       });
-      const savedUser = await this.userRepository.save(newUser);
       if (!newUser) return `Can't create an user`;
+      const savedUser = await this.userRepository.save(newUser);
+      const like = new LikeEntity();
+      like.OwnerId = savedUser.id;
+      await this.likeRepository.save(like);
       await this.mailerService.sendMail({
         to: email,
         from: 'contact@test.com',

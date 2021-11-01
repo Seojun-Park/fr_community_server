@@ -4,6 +4,7 @@ import { Board } from './src/board/entity/board.entity';
 import { Chat } from './src/chat/entity/chat.entity';
 import { Dm } from './src/dm/entity/dm.entity';
 import { Image } from './src/image/entity/image.entity';
+import { Like } from './src/like/entity/like.entity';
 import { Market } from './src/market/entity/market.entity';
 import { Meet } from './src/meet/entity/meet.entity';
 import { MeetMember } from './src/meet/entity/meetMember.entity';
@@ -32,6 +33,7 @@ const config: TypeOrmModuleOptions = {
     Recruit,
     Meet,
     MeetMember,
+    Like,
   ],
   migrations: [__dirname + '/src/migrations/*.ts'],
   cli: { migrationsDir: 'src/migrations' },

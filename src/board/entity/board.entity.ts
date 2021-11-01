@@ -6,12 +6,14 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Image } from '../../image/entity/image.entity';
+import { Like } from '../../like/entity/like.entity';
 import { Reply } from '../../reply/entity/reply.entity';
 import { User } from '../../user/entity/user.entity';
 
@@ -60,9 +62,17 @@ export class Board extends BaseEntity {
 
   @OneToMany(() => Reply, (reply) => reply.Board, { nullable: true })
   @Field((type) => [Reply], { nullable: true })
-  Replies: Reply[];
+  Replies: Reply[] | null;
 
   @OneToMany(() => Image, (image) => image.Board, { nullable: true })
   @Field((type) => [Image], { nullable: true })
-  Images: Image[];
+  Images: Image[] | null;
+
+  @ManyToMany(() => Like, (like) => like.Boards, {
+    nullable: true,
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
+  @Field(() => [Like], { nullable: true })
+  Likes: Like[] | null;
 }

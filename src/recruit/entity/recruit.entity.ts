@@ -6,10 +6,12 @@ import {
   DeleteDateColumn,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Like } from '../../like/entity/like.entity';
 import { User } from '../../user/entity/user.entity';
 
 @Entity()
@@ -67,4 +69,8 @@ export class Recruit extends BaseEntity {
   @JoinColumn([{ name: 'OwnerId', referencedColumnName: 'id' }])
   @Field(() => User)
   Owner: User;
+
+  @ManyToMany(() => Like, (like) => like.Recruits, { nullable: true })
+  @Field(() => [Like], { nullable: true })
+  Likes: Like[] | null;
 }
