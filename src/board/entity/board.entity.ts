@@ -70,9 +70,7 @@ export class Board extends BaseEntity {
 
   @ManyToMany(() => Like, (like) => like.Boards, {
     nullable: true,
-    onDelete: 'SET NULL',
-    onUpdate: 'CASCADE',
   })
   @Field(() => [Like], { nullable: true })
-  Likes: Like[] | null;
+  Likes?: Like[] | null;
 }

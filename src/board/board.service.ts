@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Image } from '../image/entity/image.entity';
+import { User } from '../user/entity/user.entity';
 import { CreateBoardInput } from './dto/create-board.input';
 import { EditBoardInput } from './dto/edit-board.input';
 import { Board } from './entity/board.entity';
@@ -9,6 +10,7 @@ import { Board } from './entity/board.entity';
 @Injectable()
 export class BoardService {
   constructor(
+    @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(Board) private boardRepository: Repository<Board>,
     @InjectRepository(Image) private imageRepository: Repository<Image>,
   ) {}
@@ -42,7 +44,7 @@ export class BoardService {
   async createBoard(args: CreateBoardInput): Promise<Board | string> {
     try {
       const { UserId, title, content, category, images } = args;
-      const writer: Board | undefined = await this.boardRepository.findOne({
+      const writer: User | undefined = await this.userRepository.findOne({
         where: { id: UserId },
       });
       if (!writer) return 'Fail to find the user';

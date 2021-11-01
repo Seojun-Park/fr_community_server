@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, Like, ILike } from 'typeorm';
+import { Repository, ILike } from 'typeorm';
 import { CreateUserInput } from './dto/create-user.input';
 import { EditUserInput } from './dto/edit-user.input';
 import { User } from './entity/user.entity';
@@ -76,9 +76,14 @@ export class UserService {
         verifiedCode,
       });
       if (!newUser) return `Can't create an user`;
-      const savedUser = await this.userRepository.save(newUser);
+      const user = await this.userRepository.save(newUser);
       const like = new LikeEntity();
-      like.OwnerId = savedUser.id;
+      like.OwnerId = user.id;
+      like.Boards = [];
+      like.Markets = [];
+      like.Rents = [];
+      like.Recruits = [];
+      like.Meets = [];
       await this.likeRepository.save(like);
       await this.mailerService.sendMail({
         to: email,
@@ -86,7 +91,7 @@ export class UserService {
         subject: 'Testing sed email',
         html: `<b>welcome ${verifiedCode}</b>`,
       });
-      return savedUser;
+      return await this.userRepository.save(user);
     } catch (err) {
       return err.message;
     }
@@ -236,7 +241,6 @@ export class UserService {
         where: {
           nickname: ILike(`%${term}%`),
         },
-        // where: `User.nickname ILike '%${term}%`,
       });
       if (!foundUsers) return 'no Users with the nickname';
       return foundUsers;

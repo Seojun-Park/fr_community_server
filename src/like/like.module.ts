@@ -15,5 +15,6 @@ import { Rent } from '../rent/entity/rent.entity';
     TypeOrmModule.forFeature([User, Like, Board, Meet, Market, Recruit, Rent]),
   ],
   providers: [LikeService, LikeResolver],
+  exports: [LikeService],
 })
 export class LikeModule {}

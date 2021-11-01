@@ -1,5 +1,11 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Board } from '../board/entity/board.entity';
+import { Market } from '../market/entity/market.entity';
+import { Meet } from '../meet/entity/meet.entity';
+import { Recruit } from '../recruit/entity/recruit.entity';
+import { Rent } from '../rent/entity/rent.entity';
+import { User } from '../user/entity/user.entity';
 import { Like } from './entity/like.entity';
 import { LikeService } from './like.service';
 
@@ -16,6 +22,12 @@ class MockLikeRepository {
     return 'no Like found';
   }
 }
+class MockUserRepository {}
+class MockBoardRepository {}
+class MockRentRepository {}
+class MockRecruitRepository {}
+class MockMeetRepository {}
+class MockMarketRepository {}
 
 describe('LikeService', () => {
   let service: LikeService;
@@ -27,6 +39,30 @@ describe('LikeService', () => {
         {
           provide: getRepositoryToken(Like),
           useClass: MockLikeRepository,
+        },
+        {
+          provide: getRepositoryToken(User),
+          useClass: MockUserRepository,
+        },
+        {
+          provide: getRepositoryToken(Board),
+          useClass: MockBoardRepository,
+        },
+        {
+          provide: getRepositoryToken(Rent),
+          useClass: MockRentRepository,
+        },
+        {
+          provide: getRepositoryToken(Recruit),
+          useClass: MockRecruitRepository,
+        },
+        {
+          provide: getRepositoryToken(Meet),
+          useClass: MockMeetRepository,
+        },
+        {
+          provide: getRepositoryToken(Market),
+          useClass: MockMarketRepository,
         },
       ],
     }).compile();

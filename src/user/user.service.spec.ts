@@ -40,10 +40,6 @@ describe('UserService', () => {
     service = module.get<UserService>(UserService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
-
   it('Should return user by id', () => {
     expect(service.getUser(1)).resolves.toStrictEqual({
       id: 1,

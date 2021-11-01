@@ -30,7 +30,12 @@ export class Like extends BaseEntity {
   @Field(() => Int)
   OwnerId: number;
 
-  @ManyToMany(() => Board, (board) => board.Likes, { nullable: true })
+  @ManyToMany(() => Board, (board) => board.Likes, {
+    nullable: true,
+    eager: true,
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
   @JoinTable({
     name: 'likeBoards',
     joinColumn: {
@@ -138,10 +143,11 @@ export class Like extends BaseEntity {
   deletedAt?: string | null;
 
   @OneToOne((type) => User, (user) => user.Like, {
+    eager: true,
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
   })
-  @JoinColumn([{ name: 'OwnderId', referencedColumnName: 'id' }])
+  @JoinColumn([{ name: 'OwnerId', referencedColumnName: 'id' }])
   @Field(() => User)
   Owner: User;
 }

@@ -48,9 +48,9 @@ export class User extends BaseEntity {
   @Field()
   email: string;
 
-  @Column({ name: 'LikeId' })
-  @Field((type) => Int)
-  LikeId: number;
+  @Column({ name: 'LikeId', nullable: true })
+  @Field((type) => Int, { nullable: true })
+  LikeId: number | null;
 
   @Column({ type: 'boolean', default: false })
   @Field((type) => Boolean)

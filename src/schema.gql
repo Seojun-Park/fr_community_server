@@ -208,6 +208,7 @@ type User {
   firstName: String!
   lastName: String!
   email: String!
+  LikeId: Int
   verified: Boolean!
   verifiedCode: String
   password: String!
