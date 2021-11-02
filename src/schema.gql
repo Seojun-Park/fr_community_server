@@ -573,6 +573,6 @@ input EditMeetInput {
 
 type Subscription {
   dmSubscription(ChatId: Int!): Dm!
-  memberOut(chatId: Int!): ChatOutReturn!
   getDm(userId: Int!): Dm!
+  memberOut(chatId: Int!): ChatOutReturn!
 }

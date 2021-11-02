@@ -7,7 +7,7 @@ import {
   Subscription,
 } from '@nestjs/graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { Dm } from '../dm/entity/dm.entity';
+// import { Dm } from '../dm/entity/dm.entity';
 import { ChatService } from './chat.service';
 import { ChatOutReturn, ChatReturn, ChatsReturn } from './dto/chat-return.dto';
 import { CreateChatInput } from './dto/create-chat.input';
@@ -26,18 +26,6 @@ export class ChatResolver {
   })
   memberOut(@Args('chatId', { type: () => Int }) chatId: number) {
     return pubSub.asyncIterator('memberOut');
-  }
-
-  @Subscription((returns) => Dm, {
-    filter: (payload, variables) => {
-      return (
-        payload.getDm.ReceiverId === variables.userId ||
-        payload.getDm.SenderId === variables.userId
-      );
-    },
-  })
-  getDm(@Args('userId', { type: () => Int }) userId: number) {
-    return pubSub.asyncIterator('getDm');
   }
 
   @Query((returns) => ChatReturn)

@@ -26,6 +26,18 @@ export class DmResolver {
     return pubSub.asyncIterator('dmSubscription');
   }
 
+  @Subscription((returns) => Dm, {
+    filter: (payload, variables) => {
+      return (
+        payload.getDm.ReceiverId === variables.userId ||
+        payload.getDm.SenderId === variables.userId
+      );
+    },
+  })
+  getDm(@Args('userId', { type: () => Int }) userId: number) {
+    return pubSub.asyncIterator('getDm');
+  }
+
   @Mutation((returns) => DmReturn)
   async sendDm(
     @Args('args', { type: () => CreateDmInput }) args: CreateDmInput,
