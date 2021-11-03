@@ -14,6 +14,18 @@ export class UserResolver {
   ) {}
 
   @Query((returns) => UserReturn)
+  async getMyProfile(
+    @Args('token', { type: () => String }) token: string,
+  ): Promise<UserReturn> {
+    const res = await this.userService.getMyProfile(token);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
+
+  @Query((returns) => UserReturn)
   async getUser(
     @Args('id', { type: () => Int }) id: number,
   ): Promise<UserReturn> {

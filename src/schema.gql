@@ -355,6 +355,7 @@ type LikeReturn {
 }
 
 type Query {
+  getMyProfile(token: String!): UserReturn!
   getUser(id: Int!): UserReturn!
   getUserByEmail(email: String!): UserReturn!
   getUsers: UsersReturn!

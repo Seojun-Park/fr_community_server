@@ -213,6 +213,46 @@ export class UserService {
     }
   }
 
+  async getMyProfile(token: string): Promise<string | User> {
+    try {
+      const decoded: any = await this.jwtService.verify(
+        token.includes(' ') ? token.split(' ')[1] : token,
+        { secret: process.env.JWT_SECRET || '' },
+      );
+      if (decoded && decoded.id) {
+        const user: User = await this.userRepository.findOne({
+          where: { id: decoded.id },
+          relations: [
+            'Like',
+            'Like.Boards',
+            'Like.Rents',
+            'Like.Markets',
+            'Like.Recruits',
+            'Like.Meets',
+            'Meets',
+            'Meets.Likes',
+            'Rent',
+            'Rent.Likes',
+            'Board',
+            'Board.Likes',
+            'Market',
+            'Market.Likes',
+            'Recruits',
+            'Recruits.Likes',
+          ],
+        });
+        if (user) {
+          return user;
+        } else {
+          return null;
+        }
+      }
+      return undefined;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
   async getMe(token: string): Promise<string | User> {
     try {
       const decoded: any = await this.jwtService.verify(
