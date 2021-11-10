@@ -42,6 +42,7 @@ export class ReplyService {
   async deleteReply(id: number): Promise<boolean | string> {
     try {
       await this.replyRepository.delete({ id });
+      return true;
     } catch (err) {
       return err.message;
     }

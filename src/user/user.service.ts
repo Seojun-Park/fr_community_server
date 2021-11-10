@@ -241,7 +241,6 @@ export class UserService {
             'Recruits.Likes',
           ],
         });
-        console.log(user);
         if (user) {
           return user;
         } else {

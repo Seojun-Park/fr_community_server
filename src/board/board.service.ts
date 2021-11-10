@@ -19,7 +19,7 @@ export class BoardService {
     try {
       const res = await this.boardRepository.findOne({
         where: { id },
-        relations: ['Writer', 'Replies'],
+        relations: ['Writer', 'Replies', 'Replies.User'],
       });
       if (!res) return 'no user found';
       return res;
