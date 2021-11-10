@@ -68,35 +68,35 @@ export class LikeService {
       if (!like) return 'no Like found';
       switch (type) {
         case 'board':
-          if (like.Boards.find((v) => v.id === Id)) {
+          if (like.Boards.findIndex((v) => v.id === Id) === 0) {
             like.Boards.filter((v) => v.id !== Id);
           } else {
             like.Boards.push(model);
           }
           break;
         case 'market':
-          if (like.Markets.find((v) => v.id === Id)) {
+          if (like.Markets.findIndex((v) => v.id === Id) === 0) {
             like.Markets.filter((v) => v.id !== Id);
           } else {
             like.Markets.push(model);
           }
           break;
         case 'recruit':
-          if (like.Recruits.find((v) => v.id === Id)) {
+          if (like.Recruits.findIndex((v) => v.id === Id) === 0) {
             like.Recruits.filter((v) => v.id !== Id);
           } else {
             like.Recruits.push(model);
           }
           break;
         case 'rent':
-          if (like.Rents.find((v) => v.id === Id)) {
+          if (like.Rents.findIndex((v) => v.id === Id) === 0) {
             like.Rents.filter((v) => v.id !== Id);
           } else {
             like.Rents.push(model);
           }
           break;
         case 'meet':
-          if (like.Meets.find((v) => v.id === Id)) {
+          if (like.Meets.findIndex((v) => v.id === Id) === 0) {
             like.Meets.filter((v) => v.id !== Id);
           } else {
             like.Meets.push(model);
