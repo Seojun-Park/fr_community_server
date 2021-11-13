@@ -31,6 +31,18 @@ export class BoardResolver {
     };
   }
 
+  @Query((returns) => BoardsReturn)
+  async getBoardsByCategory(
+    @Args('category', { type: () => String }) category: string,
+  ): Promise<BoardsReturn> {
+    const res = await this.boardService.getBoardsByCategory(category);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
+
   @Mutation((returns) => BoardReturn)
   async createBoard(
     @Args('args', { type: () => CreateBoardInput }) args: CreateBoardInput,

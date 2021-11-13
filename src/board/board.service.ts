@@ -41,6 +41,20 @@ export class BoardService {
     }
   }
 
+  async getBoardsByCategory(category: string): Promise<Board[] | string> {
+    try {
+      const boards: Board[] | undefined = await this.boardRepository.find({
+        where: { category },
+        order: { createdAt: 'DESC' },
+      });
+      if (!boards) return 'Fail to request board list';
+      if (boards.length === 0) return 'no boards';
+      return boards;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
   async createBoard(args: CreateBoardInput): Promise<Board | string> {
     try {
       const { UserId, title, content, category, images } = args;

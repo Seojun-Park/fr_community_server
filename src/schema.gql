@@ -345,6 +345,7 @@ type Query {
   searchUsers(term: String!): UsersReturn!
   getBoard(id: Int!): BoardReturn!
   getBoards: BoardsReturn!
+  getBoardsByCategory(category: String!): BoardsReturn!
   getMarket(id: Int!): MarketReturn!
   getMarkets: MarketsReturn!
   getRent(id: Int!): RentReturn!

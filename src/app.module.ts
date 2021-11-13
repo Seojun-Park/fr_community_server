@@ -47,8 +47,9 @@ AdminJS.registerAdapter({ Database, Resource });
         },
       },
       context: async ({ req }) => {
-        const token = req.headers.authorization || '';
-        console.log(token);
+        // console.log(req);
+        // const token = req.headers.authorization || '';
+        // console.log(token);
       },
       cors: {
         origin: process.env.COR_ORIGIN_DEV,
