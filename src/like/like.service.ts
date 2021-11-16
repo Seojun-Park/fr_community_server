@@ -42,7 +42,10 @@ export class LikeService {
       let model;
       switch (type) {
         case 'board':
-          model = await this.boardRepository.findOne({ where: { id: Id } });
+          model = await this.boardRepository.findOne({
+            where: { id: Id },
+            relations: ['Likes'],
+          });
           break;
         case 'market':
           model = await this.marketRepository.findOne({ where: { id: Id } });
@@ -66,38 +69,40 @@ export class LikeService {
       });
       if (!user) return 'no User found';
       if (!like) return 'no Like found';
+      console.log(model);
       switch (type) {
         case 'board':
           if (like.Boards.findIndex((v) => v.id === Id) === 0) {
-            like.Boards.filter((v) => v.id !== Id);
+            like.Boards = like.Boards.filter((v) => v.id !== Id);
           } else {
             like.Boards.push(model);
           }
+          console.log(like);
           break;
         case 'market':
           if (like.Markets.findIndex((v) => v.id === Id) === 0) {
-            like.Markets.filter((v) => v.id !== Id);
+            like.Markets = like.Markets.filter((v) => v.id !== Id);
           } else {
             like.Markets.push(model);
           }
           break;
         case 'recruit':
           if (like.Recruits.findIndex((v) => v.id === Id) === 0) {
-            like.Recruits.filter((v) => v.id !== Id);
+            like.Recruits = like.Recruits.filter((v) => v.id !== Id);
           } else {
             like.Recruits.push(model);
           }
           break;
         case 'rent':
           if (like.Rents.findIndex((v) => v.id === Id) === 0) {
-            like.Rents.filter((v) => v.id !== Id);
+            like.Rents = like.Rents.filter((v) => v.id !== Id);
           } else {
             like.Rents.push(model);
           }
           break;
         case 'meet':
           if (like.Meets.findIndex((v) => v.id === Id) === 0) {
-            like.Meets.filter((v) => v.id !== Id);
+            like.Meets = like.Meets.filter((v) => v.id !== Id);
           } else {
             like.Meets.push(model);
           }
