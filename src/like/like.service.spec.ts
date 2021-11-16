@@ -70,10 +70,7 @@ describe('LikeService', () => {
     service = module.get<LikeService>(LikeService);
   });
 
-  it('should return Like by UserId', () => {
-    expect(service.getLike(1)).resolves.toStrictEqual({
-      id: 1,
-      OwnerId: 1,
-    });
+  it('should return Like by UserId(fail)', () => {
+    expect(service.getLike(1)).resolves.toBe('no Like found');
   });
 });

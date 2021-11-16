@@ -41,11 +41,15 @@ export class BoardService {
     }
   }
 
-  async getBoardsByCategory(category: string): Promise<Board[] | string> {
+  async getBoardsByCategory(
+    category: string,
+    loadQunatity: number,
+  ): Promise<Board[] | string> {
     try {
       const boards: Board[] | undefined = await this.boardRepository.find({
         where: { category },
         order: { createdAt: 'DESC' },
+        take: loadQunatity,
       });
       if (!boards) return 'Fail to request board list';
       if (boards.length === 0) return 'no boards';

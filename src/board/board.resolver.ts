@@ -34,8 +34,12 @@ export class BoardResolver {
   @Query((returns) => BoardsReturn)
   async getBoardsByCategory(
     @Args('category', { type: () => String }) category: string,
+    @Args('loadQuantity', { type: () => Int }) loadQuantity: number,
   ): Promise<BoardsReturn> {
-    const res = await this.boardService.getBoardsByCategory(category);
+    const res = await this.boardService.getBoardsByCategory(
+      category,
+      loadQuantity,
+    );
     return {
       success: typeof res === 'string' ? false : true,
       error: typeof res === 'string' ? res : null,
