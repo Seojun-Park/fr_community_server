@@ -140,7 +140,7 @@ type Reply {
   updatedAt: String!
   deletedAt: String
   BoardId: Int!
-  Board: Board!
+  Board: Board
   UserId: User!
   User: User!
 }

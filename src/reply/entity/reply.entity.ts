@@ -40,16 +40,23 @@ export class Reply extends BaseEntity {
   @Field(() => Int)
   BoardId: number;
 
-  @ManyToOne((type) => Board, (board) => board.Replies)
-  @Field((type) => Board)
+  @ManyToOne((type) => Board, (board) => board.Replies, {
+    nullable: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @Field((type) => Board, { nullable: true })
   @JoinColumn([{ name: 'BoardId', referencedColumnName: 'id' }])
-  Board: Board;
+  Board: Board | null;
 
   @Column({ name: 'UserId' })
   @Field((type) => User)
   UserId: number;
 
-  @ManyToOne((type) => User, (user) => user.Replies)
+  @ManyToOne((type) => User, (user) => user.Replies, {
+    onDelete: 'SET NULL',
+    onUpdate: 'CASCADE',
+  })
   @Field((type) => User)
   @JoinColumn([{ name: 'UserId', referencedColumnName: 'id' }])
   User: User;

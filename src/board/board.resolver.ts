@@ -74,7 +74,12 @@ export class BoardResolver {
   @Mutation((returns) => BoardReturn)
   async deleteBoard(
     @Args('id', { type: () => Int }) id: number,
-  ): Promise<boolean | string> {
-    return await this.boardService.deleteBoard(id);
+  ): Promise<BoardReturn> {
+    const res = await this.boardService.deleteBoard(id);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: null,
+    };
   }
 }

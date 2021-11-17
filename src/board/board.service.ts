@@ -111,7 +111,9 @@ export class BoardService {
 
   async deleteBoard(id: number): Promise<boolean | string> {
     try {
-      await this.boardRepository.delete({ id });
+      // await this.boardRepository.delete({ id });
+      const board = await this.boardRepository.findOne({ id });
+      await this.boardRepository.remove(board);
       return true;
     } catch (err) {
       return err.message;
