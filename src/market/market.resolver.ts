@@ -22,6 +22,19 @@ export class MarketResolver {
   }
 
   @Query((returns) => MarketsReturn)
+  async getMarketsByCategory(
+    @Args('category', { type: () => String }) category: string,
+    @Args('load', { type: () => Int }) load: number,
+  ): Promise<MarketsReturn> {
+    const res = await this.marketService.getMarketsByCategory(category, load);
+    return {
+      success: typeof res === 'string' ? false : true,
+      error: typeof res === 'string' ? res : null,
+      data: typeof res === 'string' ? null : res,
+    };
+  }
+
+  @Query((returns) => MarketsReturn)
   async getMarkets(): Promise<MarketsReturn> {
     const res = await this.marketService.getMarkets();
     return {

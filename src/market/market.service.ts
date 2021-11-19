@@ -25,6 +25,23 @@ export class MarketService {
     }
   }
 
+  async getMarketsByCategory(
+    category: string,
+    load: number,
+  ): Promise<Market[] | string> {
+    try {
+      const res = await this.marketRepository.find({
+        where: { type: category },
+        order: { createdAt: 'DESC' },
+        relations: ['User'],
+        take: load,
+      });
+      return res;
+    } catch (err) {
+      return err.message;
+    }
+  }
+
   async getMarkets(): Promise<Market[] | string> {
     try {
       const res = await this.marketRepository.find({
