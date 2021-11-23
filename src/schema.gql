@@ -15,9 +15,7 @@ type Meet {
   title: String!
   content: String!
 
-  """
-  category type class / meetup
-  """
+  """category type class / meetup"""
   category: String!
   price: String
   period: String
@@ -40,9 +38,7 @@ type Recruit {
   location: String!
   salary: String!
 
-  """
-  recruting type hiring / searching / done
-  """
+  """recruting type hiring / searching / done"""
   type: String!
   OwnerId: Int!
   createdAt: String!
@@ -59,26 +55,18 @@ type Rent {
   price: String!
   deposit: String!
 
-  """
-  type of residence such as studio / apartment / house
-  """
+  """type of residence such as studio / apartment / house"""
   type: String!
 
-  """
-  rent period such as long / short
-  """
+  """rent period such as long / short"""
   term: String!
 
-  """
-  heat type such as central / individual
-  """
+  """heat type such as central / individual"""
   heatType: String!
   square: String!
   address: String!
 
-  """
-  form of residence single / colocation / sous-location
-  """
+  """form of residence single / colocation / sous-location"""
   option: String!
   allocation: Boolean!
   proof: Boolean!
@@ -115,20 +103,14 @@ type Market {
   content: String!
   UserId: Int!
 
-  """
-  euro currency
-  """
+  """euro currency"""
   price: String!
   location: String!
 
-  """
-  deal type buy / sell
-  """
+  """deal type buy / sell"""
   type: String!
 
-  """
-  deal status sold / onSale
-  """
+  """deal status sold / onSale"""
   status: String!
   thumbnail: String
   createdAt: String!
@@ -387,11 +369,7 @@ type Mutation {
   changePassword(newPassword: String!, password: String!, id: Int!): UserReturn!
   login(password: String!, email: String!): TokenReturn!
   sendNewCode(email: String!): UserReturn!
-  sendNewPassword(
-    lastName: String!
-    firstName: String!
-    email: String!
-  ): UserReturn!
+  sendNewPassword(lastName: String!, firstName: String!, email: String!): UserReturn!
   createBoard(args: CreateBoardInput!): BoardReturn!
   editBoard(args: EditBoardInput!): BoardReturn!
   deleteBoard(id: Int!): BoardReturn!
