@@ -51,6 +51,7 @@ export class ChatService {
         relations: ['Chats', 'Chats.messages'],
       });
       const chats = user.Chats;
+      console.log(chats);
       return chats;
     } catch (err) {
       return err.message;

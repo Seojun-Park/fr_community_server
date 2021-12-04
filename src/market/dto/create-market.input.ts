@@ -1,5 +1,5 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 @InputType()
 export class CreateMarketInput {
@@ -8,29 +8,35 @@ export class CreateMarketInput {
   UserId: number;
 
   @IsNotEmpty()
-  @Field()
+  @IsString()
+  @Field(() => String)
   title: string;
 
   @IsNotEmpty()
-  @Field()
+  @IsString()
+  @Field(() => String)
   content: string;
 
   @IsNotEmpty()
-  @Field()
+  @IsString()
+  @Field(() => String)
   price: string;
 
   @IsNotEmpty()
-  @Field()
+  @IsString()
+  @Field(() => String)
   type: string;
 
   @IsNotEmpty()
-  @Field()
+  @IsString()
+  @Field(() => String)
   status: string;
 
   @IsNotEmpty()
-  @Field()
+  @IsString()
+  @Field(() => String)
   location: string;
 
   @Field(() => [String], { nullable: true })
-  images?: string[];
+  images?: string[] | null;
 }

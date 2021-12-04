@@ -54,7 +54,7 @@ export class MarketService {
     }
   }
 
-  async createMarket(args: CreateMarketInput) {
+  async createMarket(args: CreateMarketInput): Promise<Market | string> {
     try {
       const { UserId, title, content, price, location, images, status, type } =
         args;
@@ -68,6 +68,7 @@ export class MarketService {
       market.status = status;
       market.thumbnail = images ? images[0] : null;
       const savedMarket = await this.marketRepository.save(market);
+      console.log('saved?', savedMarket);
       if (images) {
         for (let i = 0; i < images.length; i++) {
           const newImages = new Image();
@@ -82,7 +83,7 @@ export class MarketService {
     }
   }
 
-  async editMarket(args: EditMarketInput) {
+  async editMarket(args: EditMarketInput): Promise<Market | string> {
     try {
       const { MarketId, title, content, price, location, status, type } = args;
       const market = await this.marketRepository.findOne({
