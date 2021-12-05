@@ -85,9 +85,13 @@ export class Market extends BaseEntity {
 
   @OneToMany(() => Image, (image) => image.Market, { nullable: true })
   @Field(() => [Image], { nullable: true })
-  Images?: Image[] | null;
+  Images: Image[] | null;
 
-  @ManyToMany(() => Like, (like) => like.Markets, { nullable: true })
+  @ManyToMany(() => Like, (like) => like.Markets, {
+    onUpdate: 'CASCADE',
+    onDelete: 'SET NULL',
+    nullable: true,
+  })
   @Field(() => [Like], { nullable: true })
-  Likes?: Like[] | null;
+  Likes: Like[] | null;
 }

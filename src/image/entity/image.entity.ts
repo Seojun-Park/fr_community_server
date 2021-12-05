@@ -55,7 +55,7 @@ export class Image {
   })
   @JoinColumn([{ name: 'MarketId', referencedColumnName: 'id' }])
   @Field(() => Market)
-  Market: Market;
+  Market: Market | null;
 
   @ManyToOne(() => Rent, (rent) => rent.Images, {
     onDelete: 'SET NULL',
@@ -63,7 +63,7 @@ export class Image {
     nullable: true,
   })
   @JoinColumn([{ name: 'RentId', referencedColumnName: 'id' }])
-  Rent: Rent;
+  Rent: Rent | null;
 
   @ManyToOne(() => Board, (board) => board.Images, {
     onDelete: 'SET NULL',
@@ -71,5 +71,5 @@ export class Image {
     nullable: true,
   })
   @JoinColumn([{ name: 'BoardId', referencedColumnName: 'id' }])
-  Board: Rent;
+  Board: Board | null;
 }

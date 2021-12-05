@@ -74,5 +74,5 @@ export class Board extends BaseEntity {
     onDelete: 'SET NULL',
   })
   @Field(() => [Like], { nullable: true })
-  Likes?: Like[] | null;
+  Likes: Like[] | null;
 }
